@@ -9,14 +9,14 @@ import createRandomEasting from './createRandomEasting'
 import createRandomNorthing from './createRandomNorthing'
 import createRandomLatitude from './createRandomLatitude'
 import createRandomLongitude from './createRandomLongitude'
+import Datum from '../../types/datum'
 
-const createRandomCrime = (pfa: PoliceForceArea, batchId: string): Crime => {
+const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum = createRandomDatum()): Crime => {
   const crimeDateTimeFrom = faker.date.past({ years: 5 })
   const crimeDateTimeTo = faker.date.between({
     from: crimeDateTimeFrom,
     to: new Date(crimeDateTimeFrom.getTime() + 12 * 60 * 60 * 1000),
   })
-  const datum = createRandomDatum()
 
   return {
     policeForceArea: pfa,

@@ -1,5 +1,6 @@
 dist/
 output/**.eml
+output/**.csv
 # Dependency directories
 node_modules/
 
@@ -9,3 +10,5 @@ node_modules/
 # dotenv environment variables file
 .env
 .env.test
+
+.DS_Store

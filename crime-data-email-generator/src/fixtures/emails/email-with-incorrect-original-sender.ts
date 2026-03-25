@@ -2,14 +2,14 @@ import Email from '../../types/email'
 import createValidEmail from '../helpers/createValidEmail'
 
 // Defines an email that should result in status of Error
-// Email has invalid resent from
+// Email has incorrect original sender
 // When testing, should NOT show error row in the police data dashboard, should get sent to DLQ for developer investigation
-const createInvalidEmailWithIncorrectResentFrom = (): Email => {
+const createEmailWithIncorrectOriginalSender = (): Email => {
   return {
     ...createValidEmail(),
-    filename: 'invalid-email-with-incorrect-resent-from.eml',
-    resentFrom: '<example@example.com>',
+    filename: 'email-with-incorrect-original-sender.eml',
+    from: 'example@email.com',
   }
 }
 
-export default createInvalidEmailWithIncorrectResentFrom
+export default createEmailWithIncorrectOriginalSender

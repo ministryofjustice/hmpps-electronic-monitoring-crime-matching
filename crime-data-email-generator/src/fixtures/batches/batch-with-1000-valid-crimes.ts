@@ -1,0 +1,18 @@
+import File from '../../types/file'
+import createCsvFromCrimes from "../helpers/createCsvFromCrimes"
+import createRandomBatchID from "../helpers/createRandomBatchId"
+import createRandomCrime from "../helpers/createRandomCrime"
+import createRandomPFA from "../helpers/createRandomPfa"
+
+const createBatchWith1000ValidCrimes = (): File => {
+    const pfa = createRandomPFA()
+    const batchId = createRandomBatchID(pfa)
+    const crimes = [...Array(1000)].map(() => createRandomCrime(pfa, batchId))
+
+    return {
+        name: 'batch-with-1000-valid-crimes.csv',
+        content: createCsvFromCrimes(crimes)
+    }
+}
+
+export default createBatchWith1000ValidCrimes
