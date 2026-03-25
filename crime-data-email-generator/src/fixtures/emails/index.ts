@@ -16,7 +16,7 @@ const emails: Array<Email> = [
   createInvalidEmailWithTwoAttachments(),
   createEmailWithGmtAndBstCrimeDates(),
   createEmailWith100Crimes(),
-  createEmailWith1000Crimes()
+  createEmailWith1000Crimes(),
 ]
 
 export default emails

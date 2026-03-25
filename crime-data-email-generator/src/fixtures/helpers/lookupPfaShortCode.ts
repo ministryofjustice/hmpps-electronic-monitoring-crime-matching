@@ -1,7 +1,7 @@
-import PoliceForceArea from "../../types/policeForceArea";
+import PoliceForceArea from '../../types/policeForceArea'
 
 const lookupPfaShortcode = (pfa: PoliceForceArea): string => {
-   const shortCodeMap: Record<PoliceForceArea, string> = {
+  const shortCodeMap: Record<PoliceForceArea, string> = {
     'Avon and Somerset': 'AVS',
     Bedfordshire: 'BFD',
     Cheshire: 'CHS',

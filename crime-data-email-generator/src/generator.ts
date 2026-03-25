@@ -1,7 +1,9 @@
 import fs from 'node:fs'
 import Email from './types/email'
 import EmailAttachment from './types/emailAttachment'
+import File from './types/file'
 import emails from './fixtures/emails'
+import batches from './fixtures/batches'
 
 const createAttachment = (attachment: EmailAttachment, boundary: string): Array<string> => {
   return [
@@ -48,8 +50,16 @@ const createEmailFile = (data: Email) => {
   fs.writeFileSync(`./output/${data.filename}`, content, 'utf8')
 }
 
+const createFile = (data: File) => {
+  fs.writeFileSync(`./output/${data.name}`, data.content, 'utf8')
+}
+
 ;(() => {
   for (const email of emails) {
     createEmailFile(email)
+  }
+
+  for (const batch of batches) {
+    createFile(batch)
   }
 })()

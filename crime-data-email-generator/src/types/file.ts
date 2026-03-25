@@ -1,6 +1,6 @@
 type File = {
-    name: string
-    content: string
+  name: string
+  content: string
 }
 
 export default File
