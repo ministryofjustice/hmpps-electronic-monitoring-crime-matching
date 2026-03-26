@@ -1,20 +1,22 @@
 import Email from '../../types/email'
-import createInvalidEmailWithIncorrectOriginalSender from './invalid-email-with-incorrect-original-sender'
-import createInvalidEmailWithIncorrectResentFrom from './invalid-email-with-incorrect-resent-from'
-import createInvalidEmailWithIncorrectSubject from './invalid-email-with-incorrect-subject'
-import createInvalidEmailWithNoAttachments from './invalid-email-with-no-attachments'
-import createInvalidEmailWithTwoAttachments from './invalid-email-with-two-attachments'
-import createValidEmailWithCrimesInDifferentTimezones from './valid-email-with-crimes-in-different-time-zones'
-import createValidEmailWithInvalidCrimeEmptyPfa from './valid-email-with-invalid-crime-empty-pfa'
+import createEmailWith100Crimes from './email-with-100-crimes'
+import createEmailWith1000Crimes from './email-with-1000-crimes'
+import createEmailWithGmtAndBstCrimeDates from './email-with-gmt-and-bst-crime-dates'
+import createEmailWithIncorrectOriginalSender from './email-with-incorrect-original-sender'
+import createEmailWithIncorrectResentFrom from './email-with-incorrect-resent-from'
+import createEmailWithIncorrectSubject from './email-with-incorrect-subject'
+import createEmailWithNoAttachments from './email-with-no-attachments'
+import createInvalidEmailWithTwoAttachments from './email-with-two-attachments'
 
 const emails: Array<Email> = [
-  createInvalidEmailWithIncorrectOriginalSender(),
-  createInvalidEmailWithIncorrectResentFrom(),
-  createInvalidEmailWithIncorrectSubject(),
-  createInvalidEmailWithNoAttachments(),
+  createEmailWithIncorrectOriginalSender(),
+  createEmailWithIncorrectResentFrom(),
+  createEmailWithIncorrectSubject(),
+  createEmailWithNoAttachments(),
   createInvalidEmailWithTwoAttachments(),
-  createValidEmailWithCrimesInDifferentTimezones(),
-  createValidEmailWithInvalidCrimeEmptyPfa()
+  createEmailWithGmtAndBstCrimeDates(),
+  createEmailWith100Crimes(),
+  createEmailWith1000Crimes(),
 ]
 
 export default emails
