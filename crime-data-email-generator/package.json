@@ -6,7 +6,8 @@
     "build": "tsc",
     "generate": "node dist/generator.js",
     "lint": "eslint . --cache --max-warnings 0",
-    "lint-fix": "eslint . --cache --max-warnings 0 --fix"
+    "lint-fix": "eslint . --cache --max-warnings 0 --fix",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^25.5.0",
     "typescript": "^5.9.3"
