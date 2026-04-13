@@ -7,7 +7,6 @@ import createBatchWithCrimeWithMatches from './batch-with-crime-with-matches'
 import createBatchWithSomeValidSomeInvalidCrimes from './batch-with-some-valid-some-invalid'
 import createBatchWithUtcAndBstDates from './batch-with-utc-and-bst-dates'
 
-
 const batches: Array<File> = [
   createBatchWith10ValidCrimes(),
   createBatchWith100ValidCrimes(),
