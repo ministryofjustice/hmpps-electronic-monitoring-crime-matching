@@ -1,4 +1,4 @@
-import Crime from '../../types/crime'
+import { CrimeLike } from '../../types/crime'
 import File from '../../types/file'
 import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 import createRandomBatchID from '../helpers/createRandomBatchId'
@@ -8,7 +8,7 @@ import createRandomPFA from '../helpers/createRandomPfa'
 const createBatchWithSomeValidSomeInvalidCrimes = (): File => {
   const pfa = createRandomPFA()
   const batchId = createRandomBatchID(pfa)
-  const crimes: Array<Crime> = [
+  const crimes: Array<CrimeLike> = [
     ...[...Array(10)].map(() => createRandomCrime(pfa, batchId)),
     // Invalid crime type
     {

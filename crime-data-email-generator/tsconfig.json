@@ -3,15 +3,20 @@
   "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./src",
     "sourceMap": true,
+    "declaration": true,
     "noEmit": false,
     "allowJs": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./server/@types", "./node_modules/@types"],
-    "strict": true
+    "typeRoots": ["./node_modules/@types"],
+    "strict": true,
+    "types": [
+      "node"
+    ]
   },
   "exclude": [
     "node_modules",

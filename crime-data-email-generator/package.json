@@ -1,7 +1,7 @@
 {
   "name": "crime-data-email-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "generate": "node dist/generator.js",
@@ -19,7 +19,7 @@
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@tsconfig/node24": "^24.0.4",
-    "@types/node": "^25.5.0",
+    "@types/node": "25.9.1",
     "typescript": "^5.9.3"
   }
 }
