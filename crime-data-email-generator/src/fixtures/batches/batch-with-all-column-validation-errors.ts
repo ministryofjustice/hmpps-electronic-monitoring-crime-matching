@@ -1,4 +1,4 @@
-import Crime from '../../types/crime'
+import { CrimeLike } from '../../types/crime'
 import File from '../../types/file'
 import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 import createRandomBatchID from '../helpers/createRandomBatchId'
@@ -11,7 +11,7 @@ import lookupPfaShortcode from '../helpers/lookupPfaShortCode'
 const createBatchWithAllColumnValidations = (): File => {
   const pfa = createRandomPFA()
   const batchId = createRandomBatchID(pfa)
-  const crimes: Array<Crime> = [
+  const crimes: Array<CrimeLike> = [
     // Crime with missing PFA
     {
       ...createRandomCrime(pfa, batchId),
@@ -45,10 +45,10 @@ const createBatchWithAllColumnValidations = (): File => {
     // Crime with missing location
     {
       ...createRandomCrime(pfa, batchId),
-      easting: '',
-      northing: '',
-      latitude: '',
-      longitude: '',
+      easting: null,
+      northing: null,
+      latitude: null,
+      longitude: null,
     },
     // Crime with invalid PFA
     {
@@ -95,42 +95,42 @@ const createBatchWithAllColumnValidations = (): File => {
     // Crime with out of range (lower) easting
     {
       ...createRandomCrime(pfa, batchId, 'OSGB36'),
-      easting: '-1',
+      easting: -1,
     },
     // Crime with out of range (upper) easting
     {
       ...createRandomCrime(pfa, batchId, 'OSGB36'),
-      easting: '600001',
+      easting: 600001,
     },
     // Crime with out of range (lower) northing
     {
       ...createRandomCrime(pfa, batchId, 'OSGB36'),
-      northing: '-1',
+      northing: -1,
     },
     // Crime with out of range (upper) northing
     {
       ...createRandomCrime(pfa, batchId, 'OSGB36'),
-      northing: '1300001',
+      northing: 1300001,
     },
     // Crime with out of range (lower) latitude
     {
       ...createRandomCrime(pfa, batchId, 'WGS84'),
-      latitude: '49.4',
+      latitude: 49.4,
     },
     // Crime with out of range (upper) latitude
     {
       ...createRandomCrime(pfa, batchId, 'WGS84'),
-      latitude: '61.6',
+      latitude: 61.6,
     },
     // Crime with out of range (lower) longitude
     {
       ...createRandomCrime(pfa, batchId, 'WGS84'),
-      longitude: '-8.6',
+      longitude: -8.6,
     },
     // Crime with out of range (upper) longitude
     {
       ...createRandomCrime(pfa, batchId, 'WGS84'),
-      longitude: '2.7',
+      longitude: 2.7,
     },
     // Crime with both WGS84 and OSGB36
     {

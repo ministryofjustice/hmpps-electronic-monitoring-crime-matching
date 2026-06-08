@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker'
 import Datum from '../../types/datum'
 
-const createRandomLatitude = (datum: Datum): string => {
+const createRandomLatitude = (datum: Datum): number | null => {
   if (datum === 'OSGB36') {
-    return ''
+    return null
   }
-  return faker.number.float({ min: 49.5, max: 61.5 }).toString()
+  return faker.number.float({ min: 49.87, max: 55.81 })
 }
 
 export default createRandomLatitude

@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker'
 import Datum from '../../types/datum'
 
-const createRandomEasting = (datum: Datum): string => {
+const createRandomEasting = (datum: Datum): number | null => {
   if (datum === 'WGS84') {
-    return ''
+    return null
   }
-  return faker.number.bigInt({ min: 0, max: 600000 }).toString()
+  return faker.number.int({ min: 0, max: 600000 })
 }
 
 export default createRandomEasting

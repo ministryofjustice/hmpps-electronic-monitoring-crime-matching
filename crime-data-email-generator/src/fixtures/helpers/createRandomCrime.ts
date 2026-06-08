@@ -4,7 +4,6 @@ import PoliceForceArea from '../../types/policeForceArea'
 import createRandomDatum from './createRandomDatum'
 import createRandomCrimeType from './createRandomCrimeType'
 import createRandomCrimeReference from './createRandomCrimeReference'
-import formatDate from './formatDate'
 import createRandomEasting from './createRandomEasting'
 import createRandomNorthing from './createRandomNorthing'
 import createRandomLatitude from './createRandomLatitude'
@@ -24,8 +23,8 @@ const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum =
     crimeTypeDescription: '',
     batchId,
     crimeReference: createRandomCrimeReference(),
-    crimeDateTimeFrom: formatDate(crimeDateTimeFrom, true),
-    crimeDateTimeTo: formatDate(crimeDateTimeTo, true),
+    crimeDateTimeFrom,
+    crimeDateTimeTo,
     easting: createRandomEasting(datum),
     northing: createRandomNorthing(datum),
     latitude: createRandomLatitude(datum),

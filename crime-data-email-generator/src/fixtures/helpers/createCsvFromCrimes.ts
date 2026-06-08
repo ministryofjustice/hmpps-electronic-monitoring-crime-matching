@@ -1,6 +1,7 @@
-import Crime from '../../types/crime'
+import { CrimeLike } from '../../types/crime'
+import formatDate from './formatDate'
 
-const createCsvFromCrimes = (crimes: Array<Crime>): string => {
+const createCsvFromCrimes = (crimes: Array<CrimeLike>): string => {
   return crimes
     .map(crime =>
       [
@@ -9,12 +10,14 @@ const createCsvFromCrimes = (crimes: Array<Crime>): string => {
         crime.crimeTypeDescription,
         crime.batchId,
         crime.crimeReference,
-        crime.crimeDateTimeFrom,
-        crime.crimeDateTimeTo,
-        crime.easting,
-        crime.northing,
-        crime.latitude,
-        crime.longitude,
+        typeof crime.crimeDateTimeFrom === 'string'
+          ? crime.crimeDateTimeFrom
+          : formatDate(crime.crimeDateTimeFrom, true),
+        typeof crime.crimeDateTimeTo === 'string' ? crime.crimeDateTimeTo : formatDate(crime.crimeDateTimeTo, true),
+        crime.easting === null ? '' : crime.easting,
+        crime.northing === null ? '' : crime.northing,
+        crime.latitude === null ? '' : crime.latitude,
+        crime.longitude === null ? '' : crime.longitude,
         crime.datum,
         `"${crime.crimeText}"`,
       ].join(','),

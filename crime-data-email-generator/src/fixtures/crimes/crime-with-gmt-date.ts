@@ -8,8 +8,8 @@ import createRandomCrime from '../helpers/createRandomCrime'
 // The dates should be shown to the user in Europe/London format
 const createCrimeWithGmtDate = (pfa: PoliceForceArea, batchId: string): Crime => ({
   ...createRandomCrime(pfa, batchId),
-  crimeDateTimeFrom: '20250201000000', // 2025-02-01T00:00:00Z
-  crimeDateTimeTo: '20250201110000', // 2025-02-01T11:00:00Z
+  crimeDateTimeFrom: new Date('2025-02-01T00:00:00Z'), // 2025-02-01T00:00:00Z
+  crimeDateTimeTo: new Date('2025-02-01T00:00:00Z'), // 2025-02-01T11:00:00Z
   crimeText: 'Crime date is reported in GMT, converted to UTC by PFA',
 })
 
