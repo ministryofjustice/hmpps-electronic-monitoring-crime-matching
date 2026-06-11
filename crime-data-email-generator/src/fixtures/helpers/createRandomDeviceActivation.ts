@@ -2,7 +2,7 @@ import faker from '../../faker'
 import DeviceActivation from '../../types/deviceActivation'
 
 const createRandomDeviceActivation = (): DeviceActivation => {
-  const activationDate = faker.date.past({ years: 1 })
+  const activationDate = faker.date.between({ from: '2025-01-01', to: '2025-12-31' })
   // Orders can be up to a year. Orders may not have finished (i.e. no deactivation date)
   const deactivationDate = faker.helpers.arrayElement([
     faker.date.soon({
