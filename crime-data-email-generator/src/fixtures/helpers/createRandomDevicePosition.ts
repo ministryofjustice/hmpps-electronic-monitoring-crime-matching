@@ -18,7 +18,7 @@ const createRandomDevicePosition = (): DevicePosition => {
     longitude: createRandomLongitude('WGS84')!,
     precision: createRandomPrecision(),
     speed: createRandomSpeed(),
-    timestamp, // YYYY-MM-DD HH:mm:ss.SSS
+    timestamp,
   }
 }
 
