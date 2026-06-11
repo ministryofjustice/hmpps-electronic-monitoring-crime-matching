@@ -1,7 +1,7 @@
 import faker from '../../faker'
 import DeviceActivation from '../../types/deviceActivation'
 import DeviceWearer from '../../types/deviceWearer'
-import createElectronicMonitoringData from '../electronic-monitoring/data'
+import { ElectronicMonitoringData } from '../electronic-monitoring/createElectronicMonitoringData'
 import { formatAthenaTimestamp, formatDateOfBirth } from '../helpers/formatDate'
 import createAthenaGetQueryExecutionMapping from './createAthenaGetQueryExecutionMapping'
 import createAthenaGetQueryResultsMapping from './createAthenaGetQueryResultsMapping'
@@ -226,8 +226,8 @@ const createLocationDataQueryStubsForDeviceWearer = (deviceWearer: DeviceWearer)
   ]
 }
 
-const createElectronicMonitoringStubs = () => {
-  const emData = createElectronicMonitoringData()
+const createLocationDataStubs = (electronicMonitoringData: ElectronicMonitoringData) => {
+  console.log(electronicMonitoringData.deviceWearers.map(deviceWearer => deviceWearer.firstName))
 
   const mappings = [
     // Reusable stubs
@@ -238,7 +238,7 @@ const createElectronicMonitoringStubs = () => {
     ...createEmptyResultStubs(findDeviceActivationByIdQuery),
 
     // Location data stubs
-    ...emData.deviceWearers.flatMap(createLocationDataQueryStubsForDeviceWearer),
+    ...electronicMonitoringData.deviceWearers.flatMap(createLocationDataQueryStubsForDeviceWearer),
   ]
 
   return {
@@ -246,4 +246,4 @@ const createElectronicMonitoringStubs = () => {
   }
 }
 
-export default createElectronicMonitoringStubs
+export default createLocationDataStubs

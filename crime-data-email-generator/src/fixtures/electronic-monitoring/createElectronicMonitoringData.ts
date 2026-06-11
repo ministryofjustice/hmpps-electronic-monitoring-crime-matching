@@ -7,14 +7,14 @@ type ElectronicMonitoringData = {
   deviceWearers: Array<DeviceWearer>
 }
 
-const createElectronicMonitoringData = (): ElectronicMonitoringData => {
-  const deviceWearer = createRandomDeviceWearer()
-  const deviceActivation = createRandomDeviceActivation()
-  const devicePosition = createRandomDevicePosition()
-
+const createElectronicMonitoringData = (deviceWearerCount: number): ElectronicMonitoringData => {
   return {
-    deviceWearers: [
-      {
+    deviceWearers: [...Array(deviceWearerCount)].map(() => {
+      const deviceWearer = createRandomDeviceWearer()
+      const deviceActivation = createRandomDeviceActivation()
+      const devicePosition = createRandomDevicePosition()
+
+      return {
         ...deviceWearer,
         deviceActivations: [
           {
@@ -22,9 +22,11 @@ const createElectronicMonitoringData = (): ElectronicMonitoringData => {
             positions: [devicePosition],
           },
         ],
-      },
-    ],
+      }
+    }),
   }
 }
+
+export { ElectronicMonitoringData }
 
 export default createElectronicMonitoringData
