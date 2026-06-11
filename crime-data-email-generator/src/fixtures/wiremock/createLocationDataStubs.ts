@@ -200,7 +200,7 @@ const createFindPositionsQueryStubs = (deviceActivation: DeviceActivation) => {
           position.precision.toString(),
           position.speed.toString(),
           position.direction.toString(),
-          position.timestamp,
+          formatAthenaTimestamp(position.timestamp),
           position.geolocationMechanism.toString(),
         ]),
       ],

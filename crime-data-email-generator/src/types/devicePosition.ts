@@ -8,7 +8,7 @@ type DevicePosition = {
   longitude: number
   precision: number
   speed: number
-  timestamp: string
+  timestamp: Date
 }
 
 export default DevicePosition
