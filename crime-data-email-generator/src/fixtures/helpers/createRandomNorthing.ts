@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import Datum from '../../types/datum'
 
 const createRandomNorthing = (datum: Datum): number | null => {

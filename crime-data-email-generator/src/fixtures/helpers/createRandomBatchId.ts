@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import PoliceForceArea from '../../types/policeForceArea'
-import formatDate from './formatDate'
+import { formatDate } from './formatDate'
 import lookupPfaShortcode from './lookupPfaShortCode'
 
 // Create a random batch ID with a date within the last year

@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import Crime from '../../types/crime'
 import PoliceForceArea from '../../types/policeForceArea'
 import createRandomDatum from './createRandomDatum'

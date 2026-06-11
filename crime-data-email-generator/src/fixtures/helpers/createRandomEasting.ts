@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import Datum from '../../types/datum'
 
 const createRandomEasting = (datum: Datum): number | null => {

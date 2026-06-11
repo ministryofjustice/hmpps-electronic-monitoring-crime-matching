@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import PoliceForceArea from '../../types/policeForceArea'
 
 const createRandomPFA = (): PoliceForceArea => {
