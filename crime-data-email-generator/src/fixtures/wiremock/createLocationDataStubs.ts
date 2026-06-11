@@ -227,7 +227,11 @@ const createLocationDataQueryStubsForDeviceWearer = (deviceWearer: DeviceWearer)
 }
 
 const createLocationDataStubs = (electronicMonitoringData: ElectronicMonitoringData) => {
-  console.log(electronicMonitoringData.deviceWearers.map(deviceWearer => deviceWearer.firstName))
+  console.log(
+    electronicMonitoringData.deviceWearers.map(
+      deviceWearer => `Name: ${deviceWearer.firstName}, activations: ${deviceWearer.deviceActivations.length}`,
+    ),
+  )
 
   const mappings = [
     // Reusable stubs

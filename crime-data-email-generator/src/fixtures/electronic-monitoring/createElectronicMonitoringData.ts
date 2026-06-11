@@ -1,3 +1,4 @@
+import faker from '../../faker'
 import DeviceWearer from '../../types/deviceWearer'
 import createRandomDeviceActivation from '../helpers/createRandomDeviceActivation'
 import createRandomDevicePosition from '../helpers/createRandomDevicePosition'
@@ -11,17 +12,17 @@ const createElectronicMonitoringData = (deviceWearerCount: number): ElectronicMo
   return {
     deviceWearers: [...Array(deviceWearerCount)].map(() => {
       const deviceWearer = createRandomDeviceWearer()
-      const deviceActivation = createRandomDeviceActivation()
+      const deviceActivations = faker.helpers.multiple(() => createRandomDeviceActivation(), {
+        count: { min: 1, max: 3 },
+      })
       const devicePosition = createRandomDevicePosition()
 
       return {
         ...deviceWearer,
-        deviceActivations: [
-          {
-            ...deviceActivation,
-            positions: [devicePosition],
-          },
-        ],
+        deviceActivations: deviceActivations.map(deviceActivation => ({
+          ...deviceActivation,
+          positions: [devicePosition],
+        })),
       }
     }),
   }
