@@ -27,28 +27,7 @@ const createEmptyResultStubs = (query: string) => {
   return [
     createAthenaStartQueryExecutionMapping(executionId, query, [], priority),
     createAthenaGetQueryExecutionMapping(executionId),
-    createAthenaGetQueryResultsMapping(
-      executionId,
-      [
-        // TODO: We should reuse this column set for all empty queries (even if it works)
-        { name: 'unique_device_wearer_id', type: 'varchar' },
-        { name: 'first_name', type: 'varchar' },
-        { name: 'last_name', type: 'varchar' },
-        { name: 'nomis_id', type: 'bigint' },
-        { name: 'pnc_id', type: 'varchar' },
-        { name: 'date_of_birth', type: 'date' },
-        { name: 'responsible_officer_name', type: 'varchar' },
-        { name: 'postcode', type: 'varchar' },
-        { name: 'city_or_town', type: 'varchar' },
-        { name: 'house_number_and_street_name', type: 'varchar' },
-        { name: 'device_id', type: 'bigint' },
-        { name: 'person_id', type: 'bigint' },
-        { name: 'device_activation_id', type: 'bigint' },
-        { name: 'device_activation_date', type: 'timestamp' },
-        { name: 'device_deactivation_date', type: 'timestamp' },
-      ],
-      executionParams,
-    ),
+    createAthenaGetQueryResultsMapping(executionId, [], executionParams),
   ]
 }
 
