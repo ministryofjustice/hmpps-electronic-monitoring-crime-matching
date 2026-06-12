@@ -23,6 +23,7 @@ const createTrail = (crimes: Array<Crime>) => {
   }
 
   return createRandomTrail(selectedCrime.latitude, selectedCrime.longitude)
+  return createRandomTrail(selectedCrime.latitude, selectedCrime.longitude, selectedCrime.crimeDateTimeFrom)
 }
 
 const createElectronicMonitoringData = (deviceWearerCount: number, crimes: Array<Crime>): ElectronicMonitoringData => {

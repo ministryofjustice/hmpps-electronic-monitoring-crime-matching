@@ -95,7 +95,7 @@ const createRandomChangeInHeading = () => {
 /**
  * Generates a random walking distance for the given time interval.
  *
- * Uses a walking speed between 0.8m/s and 1.8m/s, multiplied by the interval
+ * Uses a walking speed between 0.8m/s and 1.2m/s, multiplied by the interval
  * duration.
  *
  * @param intervalSeconds Number of seconds between generated positions.
@@ -103,7 +103,7 @@ const createRandomChangeInHeading = () => {
  */
 const createRandomWalkingDistance = (intervalSeconds: number) => {
   const minSpeed = 0.8
-  const maxSpeed = 1.8
+  const maxSpeed = 1.2
 
   return faker.number.int({ min: minSpeed * intervalSeconds, max: maxSpeed * intervalSeconds })
 }
@@ -125,6 +125,7 @@ const createRandomWalkingDistance = (intervalSeconds: number) => {
 const createRandomTrail = (
   startLat: number = faker.location.latitude({ min: 49.87, max: 55.81 }),
   startLng: number = faker.location.longitude({ min: -6, max: 1.9 }),
+  startTimestamp: Date = new Date(),
   count = faker.number.int({ min: 50, max: 100 }),
   intervalSeconds = 60,
 ): Array<DevicePosition> => {
@@ -134,7 +135,7 @@ const createRandomTrail = (
   // Initial direction of travel
   let heading = faker.number.float({ min: 0, max: 360 })
 
-  let timestamp = new Date()
+  let timestamp = startTimestamp
 
   const points: DevicePosition[] = []
 
