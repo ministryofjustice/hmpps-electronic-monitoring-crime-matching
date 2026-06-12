@@ -10,13 +10,12 @@ import createRandomLatitude from './createRandomLatitude'
 import createRandomLongitude from './createRandomLongitude'
 import Datum from '../../types/datum'
 
-const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum = createRandomDatum()): Crime => {
-  const crimeDateTimeFrom = faker.date.past({ years: 5 })
-  const crimeDateTimeTo = faker.date.between({
-    from: crimeDateTimeFrom,
-    to: new Date(crimeDateTimeFrom.getTime() + 12 * 60 * 60 * 1000),
-  })
-
+const createRandomWGS84Crime = (
+  pfa: PoliceForceArea,
+  batchId: string,
+  crimeDateTimeFrom: Date,
+  crimeDateTimeTo: Date,
+): Crime => {
   return {
     policeForceArea: pfa,
     crimeType: createRandomCrimeType(),
@@ -25,13 +24,50 @@ const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum =
     crimeReference: createRandomCrimeReference(),
     crimeDateTimeFrom,
     crimeDateTimeTo,
-    easting: createRandomEasting(datum),
-    northing: createRandomNorthing(datum),
-    latitude: createRandomLatitude(datum),
-    longitude: createRandomLongitude(datum),
-    datum,
+    easting: null,
+    northing: null,
+    latitude: createRandomLatitude(),
+    longitude: createRandomLongitude(),
+    datum: 'WGS84',
     crimeText: '',
   }
+}
+
+const createRandomOSGB36Crime = (
+  pfa: PoliceForceArea,
+  batchId: string,
+  crimeDateTimeFrom: Date,
+  crimeDateTimeTo: Date,
+): Crime => {
+  return {
+    policeForceArea: pfa,
+    crimeType: createRandomCrimeType(),
+    crimeTypeDescription: '',
+    batchId,
+    crimeReference: createRandomCrimeReference(),
+    crimeDateTimeFrom,
+    crimeDateTimeTo,
+    easting: createRandomEasting(),
+    northing: createRandomNorthing(),
+    latitude: null,
+    longitude: null,
+    datum: 'OSGB36',
+    crimeText: '',
+  }
+}
+
+const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum = createRandomDatum()): Crime => {
+  const crimeDateTimeFrom = faker.date.past({ years: 5 })
+  const crimeDateTimeTo = faker.date.between({
+    from: crimeDateTimeFrom,
+    to: new Date(crimeDateTimeFrom.getTime() + 12 * 60 * 60 * 1000),
+  })
+
+  if (datum === 'WGS84') {
+    return createRandomWGS84Crime(pfa, batchId, crimeDateTimeFrom, crimeDateTimeTo)
+  }
+
+  return createRandomOSGB36Crime(pfa, batchId, crimeDateTimeFrom, crimeDateTimeTo)
 }
 
 export default createRandomCrime

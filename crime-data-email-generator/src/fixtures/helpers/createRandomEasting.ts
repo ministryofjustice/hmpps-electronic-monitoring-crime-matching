@@ -1,10 +1,6 @@
 import faker from '../../faker'
-import Datum from '../../types/datum'
 
-const createRandomEasting = (datum: Datum): number | null => {
-  if (datum === 'WGS84') {
-    return null
-  }
+const createRandomEasting = (): number => {
   return faker.number.int({ min: 0, max: 600000 })
 }
 

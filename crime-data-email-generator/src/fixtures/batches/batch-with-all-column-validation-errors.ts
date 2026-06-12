@@ -135,8 +135,8 @@ const createBatchWithAllColumnValidations = (): File => {
     // Crime with both WGS84 and OSGB36
     {
       ...createRandomCrime(pfa, batchId, 'WGS84'),
-      easting: createRandomEasting('OSGB36'),
-      northing: createRandomNorthing('OSGB36'),
+      easting: createRandomEasting(),
+      northing: createRandomNorthing(),
     },
   ]
 
