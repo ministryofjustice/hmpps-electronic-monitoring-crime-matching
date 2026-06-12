@@ -137,7 +137,14 @@ const createRandomTrail = (
 
   let timestamp = startTimestamp
 
-  const points: DevicePosition[] = []
+  const points: DevicePosition[] = [
+    {
+      ...createRandomDevicePosition(),
+      latitude: lat,
+      longitude: lng,
+      timestamp,
+    },
+  ]
 
   for (let i = 0; i < count; i += 1) {
     // Don't make sudden turns every step
@@ -155,14 +162,14 @@ const createRandomTrail = (
     lat = nextPosition.latitude
     lng = nextPosition.longitude
 
+    timestamp = new Date(timestamp.getTime() + intervalSeconds * 1000)
+
     points.push({
       ...createRandomDevicePosition(),
       latitude: lat,
       longitude: lng,
       timestamp,
     })
-
-    timestamp = new Date(timestamp.getTime() + intervalSeconds * 1000)
   }
 
   return points
