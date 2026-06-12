@@ -1,5 +1,5 @@
 import { CrimeLike } from '../../types/crime'
-import formatDate from './formatDate'
+import { formatDate } from './formatDate'
 
 const createCsvFromCrimes = (crimes: Array<CrimeLike>): string => {
   return crimes

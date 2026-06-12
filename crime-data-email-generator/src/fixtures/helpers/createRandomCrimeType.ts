@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import faker from '../../faker'
 import CrimeType from '../../types/crimeType'
 
 const createRandomCrimeType = (): CrimeType => {
