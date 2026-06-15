@@ -22,7 +22,6 @@ const createTrail = (crimes: Array<Crime>) => {
     return createRandomTrail()
   }
 
-  return createRandomTrail(selectedCrime.latitude, selectedCrime.longitude)
   return createRandomTrail(selectedCrime.latitude, selectedCrime.longitude, selectedCrime.crimeDateTimeFrom)
 }
 
