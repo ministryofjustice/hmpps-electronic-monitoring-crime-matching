@@ -1,10 +1,6 @@
 import faker from '../../faker'
-import Datum from '../../types/datum'
 
-const createRandomLongitude = (datum: Datum): number | null => {
-  if (datum === 'OSGB36') {
-    return null
-  }
+const createRandomLongitude = (): number => {
   return faker.number.float({ min: -6, max: 1.9 })
 }
 
