@@ -206,7 +206,6 @@ const createLocationDataQueryStubsForDeviceWearer = (deviceWearer: DeviceWearer)
 }
 
 const createLocationDataStubs = (electronicMonitoringData: ElectronicMonitoringData) => {
-
   const mappings = [
     // Reusable stubs
     createAthenaGetWorkGroupMapping(),

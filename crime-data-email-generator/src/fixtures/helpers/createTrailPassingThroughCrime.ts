@@ -2,8 +2,9 @@ import faker from '../../faker'
 import Coordinate from '../../types/coordinate'
 import { WGS84Crime } from '../../types/crime'
 import DevicePosition from '../../types/devicePosition'
-import { WALKING_SPEED_METRES_PER_SECOND_MIN } from '../constants'
 import createRandomDevicePosition from './createRandomDevicePosition'
+import createRandomGpsNoise from './createRandomGpsNoise'
+import createRandomWalkingSpeed from './createRandomWalkingSpeed'
 import { calculateDistance, interpolatePosition } from './geometry'
 
 type OSRMResponse = {
@@ -64,7 +65,7 @@ const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date
     }
 
     const progress = distanceAlongSegment / segmentLength
-    const position = interpolatePosition(segmentStart, segmentEnd, progress)
+    const position = createRandomGpsNoise(interpolatePosition(segmentStart, segmentEnd, progress))
 
     positions.push({
       ...createRandomDevicePosition(),
@@ -74,7 +75,7 @@ const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date
     })
 
     // Progress time and distance by 60s
-    distanceAlongSegment += WALKING_SPEED_METRES_PER_SECOND_MIN * 60
+    distanceAlongSegment += createRandomWalkingSpeed() * 60
     timestamp = new Date(timestamp.getTime() + 1000 * 60)
 
     // Calculate next segment
