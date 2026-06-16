@@ -2,7 +2,7 @@ type PoliceForceArea =
   | 'Avon and Somerset'
   | 'Bedfordshire'
   | 'Cheshire'
-  | 'City of London'
+  | 'CoLP'
   | 'Cumbria'
   | 'Derbyshire'
   | 'Durham'
@@ -14,9 +14,9 @@ type PoliceForceArea =
   | 'Humberside'
   | 'Kent'
   | 'Metropolitan'
-  | 'North Wales'
+  | 'NorthWales'
   | 'Nottinghamshire'
   | 'Sussex'
-  | 'West Midlands'
+  | 'WestMidlands'
 
 export default PoliceForceArea

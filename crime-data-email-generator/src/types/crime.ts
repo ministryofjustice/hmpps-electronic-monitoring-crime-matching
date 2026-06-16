@@ -5,7 +5,7 @@ import PoliceForceArea from './policeForceArea'
 /**
  * Strictly typed Crime type
  */
-type WGS84Crime = {
+export type WGS84Crime = {
   policeForceArea: PoliceForceArea
   crimeType: CrimeType
   crimeTypeDescription: string
@@ -21,7 +21,7 @@ type WGS84Crime = {
   crimeText: string
 }
 
-type OSGB36Crime = {
+export type OSGB36Crime = {
   policeForceArea: PoliceForceArea
   crimeType: CrimeType
   crimeTypeDescription: string

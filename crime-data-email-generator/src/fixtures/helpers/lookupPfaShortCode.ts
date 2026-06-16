@@ -5,7 +5,7 @@ const lookupPfaShortcode = (pfa: PoliceForceArea): string => {
     'Avon and Somerset': 'AVS',
     Bedfordshire: 'BFD',
     Cheshire: 'CHS',
-    'City of London': 'CoLP',
+    CoLP: 'CoLP',
     Cumbria: 'CMB',
     Derbyshire: 'DBY',
     Durham: 'DUR',
@@ -17,10 +17,10 @@ const lookupPfaShortcode = (pfa: PoliceForceArea): string => {
     Humberside: 'HMB',
     Kent: 'KNT',
     Metropolitan: 'MPS',
-    'North Wales': 'NWL',
+    NorthWales: 'NWL',
     Nottinghamshire: 'NOT',
     Sussex: 'SXP',
-    'West Midlands': 'WMP',
+    WestMidlands: 'WMP',
   }
 
   return shortCodeMap[pfa]

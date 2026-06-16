@@ -1,8 +1,7 @@
 import faker from '../../faker'
 import DevicePosition from '../../types/devicePosition'
+import { METRES_PER_DEGREE_LATITUDE } from '../constants'
 import createRandomDevicePosition from './createRandomDevicePosition'
-
-const METRES_PER_DEGREE_LATITUDE = 111_320
 
 /**
  * Projects a geographic position by a given distance and heading.
