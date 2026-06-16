@@ -24,16 +24,11 @@ const createTrail = async (crimes: Array<Crime>): Promise<Array<DevicePosition>>
     return createRandomTrail()
   }
 
-  console.log(`\t\t${selectedCrime.crimeReference}`)
-
   return createTrailPassingThroughCrimeLocation(selectedCrime)
 }
 
 const createDeviceActivationWithPositions = async (crimes: Array<Crime>) => {
   const activation = createRandomDeviceActivation()
-
-  console.log(`\t${activation.device_id}`)
-
   const positions = await createTrail(crimes)
 
   return {
@@ -44,9 +39,6 @@ const createDeviceActivationWithPositions = async (crimes: Array<Crime>) => {
 
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
-
-  console.log(deviceWearer.firstName)
-
   const deviceActivationPromises = faker.helpers.multiple(() => createDeviceActivationWithPositions(crimes))
   const deviceActivations = await Promise.all(deviceActivationPromises)
 
