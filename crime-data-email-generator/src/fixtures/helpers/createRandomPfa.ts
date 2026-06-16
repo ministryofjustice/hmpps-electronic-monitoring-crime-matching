@@ -6,7 +6,7 @@ const createRandomPFA = (): PoliceForceArea => {
     'Avon and Somerset',
     'Bedfordshire',
     'Cheshire',
-    'City of London',
+    'CoLP',
     'Cumbria',
     'Derbyshire',
     'Durham',
@@ -18,10 +18,10 @@ const createRandomPFA = (): PoliceForceArea => {
     'Humberside',
     'Kent',
     'Metropolitan',
-    'North Wales',
+    'NorthWales',
     'Nottinghamshire',
     'Sussex',
-    'West Midlands',
+    'WestMidlands',
   ])
 }
 

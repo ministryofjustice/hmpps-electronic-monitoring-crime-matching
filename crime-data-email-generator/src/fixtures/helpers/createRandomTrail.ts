@@ -1,8 +1,9 @@
 import faker from '../../faker'
 import DevicePosition from '../../types/devicePosition'
+import { METRES_PER_DEGREE_LATITUDE } from '../constants'
 import createRandomDevicePosition from './createRandomDevicePosition'
-
-const METRES_PER_DEGREE_LATITUDE = 111_320
+import createRandomGpsNoise from './createRandomGpsNoise'
+import createRandomWalkingSpeed from './createRandomWalkingSpeed'
 
 /**
  * Projects a geographic position by a given distance and heading.
@@ -58,17 +59,7 @@ const createNextPosition = (latitude: number, longitude: number, distance: numbe
   // Calculate next position
   const nextPosition = projectPosition(latitude, longitude, distance, heading)
 
-  // Add a small amount of GPS noise
-  const noisyPosition = faker.location.nearbyGPSCoordinate({
-    origin: [nextPosition.latitude, nextPosition.longitude],
-    radius: 0.01, // ~10 metres
-    isMetric: true,
-  })
-
-  return {
-    latitude: noisyPosition[0],
-    longitude: noisyPosition[1],
-  }
+  return createRandomGpsNoise(nextPosition)
 }
 
 /**
@@ -102,10 +93,7 @@ const createRandomChangeInHeading = () => {
  * @returns Distance travelled in metres.
  */
 const createRandomWalkingDistance = (intervalSeconds: number) => {
-  const minSpeed = 0.8
-  const maxSpeed = 1.2
-
-  return faker.number.int({ min: minSpeed * intervalSeconds, max: maxSpeed * intervalSeconds })
+  return createRandomWalkingSpeed() * intervalSeconds
 }
 
 /**

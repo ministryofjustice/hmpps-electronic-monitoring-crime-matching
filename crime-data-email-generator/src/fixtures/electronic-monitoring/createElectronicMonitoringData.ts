@@ -1,15 +1,17 @@
 import faker from '../../faker'
 import Crime from '../../types/crime'
+import DevicePosition from '../../types/devicePosition'
 import DeviceWearer from '../../types/deviceWearer'
 import createRandomDeviceActivation from '../helpers/createRandomDeviceActivation'
 import createRandomDeviceWearer from '../helpers/createRandomDeviceWearer'
 import createRandomTrail from '../helpers/createRandomTrail'
+import createTrailPassingThroughCrimeLocation from '../helpers/createTrailPassingThroughCrime'
 
 type ElectronicMonitoringData = {
   deviceWearers: Array<DeviceWearer>
 }
 
-const createTrail = (crimes: Array<Crime>) => {
+const createTrail = async (crimes: Array<Crime>): Promise<Array<DevicePosition>> => {
   // Pick a random crime to create a trail near
   const selectedCrime = faker.helpers.maybe(
     () => faker.helpers.arrayElement(crimes.filter(crime => crime.datum === 'WGS84')),
@@ -22,25 +24,36 @@ const createTrail = (crimes: Array<Crime>) => {
     return createRandomTrail()
   }
 
-  return createRandomTrail(selectedCrime.latitude, selectedCrime.longitude, selectedCrime.crimeDateTimeFrom)
+  return createTrailPassingThroughCrimeLocation(selectedCrime)
 }
 
-const createElectronicMonitoringData = (deviceWearerCount: number, crimes: Array<Crime>): ElectronicMonitoringData => {
-  return {
-    deviceWearers: [...Array(deviceWearerCount)].map(() => {
-      const deviceWearer = createRandomDeviceWearer()
-      const deviceActivations = faker.helpers.multiple(() => createRandomDeviceActivation(), {
-        count: { min: 1, max: 3 },
-      })
+const createDeviceActivationWithPositions = async (crimes: Array<Crime>) => {
+  const activation = createRandomDeviceActivation()
+  const positions = await createTrail(crimes)
 
-      return {
-        ...deviceWearer,
-        deviceActivations: deviceActivations.map(deviceActivation => ({
-          ...deviceActivation,
-          positions: createTrail(crimes),
-        })),
-      }
-    }),
+  return {
+    ...activation,
+    positions,
+  }
+}
+
+const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
+  const deviceWearer = createRandomDeviceWearer()
+  const deviceActivationPromises = faker.helpers.multiple(() => createDeviceActivationWithPositions(crimes))
+  const deviceActivations = await Promise.all(deviceActivationPromises)
+
+  return {
+    ...deviceWearer,
+    deviceActivations,
+  }
+}
+
+const createElectronicMonitoringData = async (
+  deviceWearerCount: number,
+  crimes: Array<Crime>,
+): Promise<ElectronicMonitoringData> => {
+  return {
+    deviceWearers: await Promise.all([...Array(deviceWearerCount)].map(() => createDeviceWearer(crimes))),
   }
 }
 
