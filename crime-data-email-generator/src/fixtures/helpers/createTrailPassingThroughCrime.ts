@@ -61,27 +61,27 @@ const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date
 
     if (segmentLength === 0) {
       currentSegmentIndex += 1
-      continue
-    }
+    } else {
+      const progress = distanceAlongSegment / segmentLength
 
-    const progress = distanceAlongSegment / segmentLength
-    const position = createRandomGpsNoise(interpolatePosition(segmentStart, segmentEnd, progress))
+      const position = createRandomGpsNoise(interpolatePosition(segmentStart, segmentEnd, progress))
 
-    positions.push({
-      ...createRandomDevicePosition(),
-      latitude: position.latitude,
-      longitude: position.longitude,
-      timestamp,
-    })
+      positions.push({
+        ...createRandomDevicePosition(),
+        latitude: position.latitude,
+        longitude: position.longitude,
+        timestamp,
+      })
 
-    // Progress time and distance by 60s
-    distanceAlongSegment += createRandomWalkingSpeed() * 60
-    timestamp = new Date(timestamp.getTime() + 1000 * 60)
+      // Progress time and distance by 60s
+      distanceAlongSegment += createRandomWalkingSpeed() * 60
+      timestamp = new Date(timestamp.getTime() + 1000 * 60)
 
-    // Calculate next segment
-    while (currentSegmentIndex < segments.length - 1 && distanceAlongSegment >= segmentLengths[currentSegmentIndex]) {
-      distanceAlongSegment -= segmentLengths[currentSegmentIndex]
-      currentSegmentIndex += 1
+      // Calculate next segment
+      while (currentSegmentIndex < segments.length - 1 && distanceAlongSegment >= segmentLengths[currentSegmentIndex]) {
+        distanceAlongSegment -= segmentLengths[currentSegmentIndex]
+        currentSegmentIndex += 1
+      }
     }
   }
 
