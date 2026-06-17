@@ -11,7 +11,11 @@ type ElectronicMonitoringData = {
   deviceWearers: Array<DeviceWearer>
 }
 
-const createTrail = async (crimes: Array<Crime>): Promise<Array<DevicePosition>> => {
+const createTrail = async (
+  deviceId: number,
+  personId: number,
+  crimes: Array<Crime>,
+): Promise<Array<DevicePosition>> => {
   // Pick a random crime to create a trail near
   const selectedCrime = faker.helpers.maybe(
     () => faker.helpers.arrayElement(crimes.filter(crime => crime.datum === 'WGS84')),
@@ -21,15 +25,15 @@ const createTrail = async (crimes: Array<Crime>): Promise<Array<DevicePosition>>
   )
 
   if (selectedCrime === undefined) {
-    return createRandomTrail()
+    return createRandomTrail(deviceId, personId)
   }
 
-  return createTrailPassingThroughCrimeLocation(selectedCrime)
+  return createTrailPassingThroughCrimeLocation(deviceId, personId, selectedCrime)
 }
 
-const createDeviceActivationWithPositions = async (crimes: Array<Crime>) => {
-  const activation = createRandomDeviceActivation()
-  const positions = await createTrail(crimes)
+const createDeviceActivationWithPositions = async (personId: number, crimes: Array<Crime>) => {
+  const activation = createRandomDeviceActivation({ personId })
+  const positions = await createTrail(activation.device_id, activation.personId, crimes)
 
   return {
     ...activation,
@@ -39,7 +43,10 @@ const createDeviceActivationWithPositions = async (crimes: Array<Crime>) => {
 
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
-  const deviceActivationPromises = faker.helpers.multiple(() => createDeviceActivationWithPositions(crimes))
+  const deviceActivationPromises = faker.helpers.multiple(
+    () => createDeviceActivationWithPositions(deviceWearer.mdssPersonId, crimes),
+    { count: { min: 1, max: 3 } },
+  )
   const deviceActivations = await Promise.all(deviceActivationPromises)
 
   return {

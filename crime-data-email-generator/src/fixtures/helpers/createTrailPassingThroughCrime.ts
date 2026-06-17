@@ -30,7 +30,7 @@ const createRoute = async (waypoints: Array<Coordinate>): Promise<Array<Coordina
   return body.routes[0].geometry.coordinates.map(([longitude, latitude]) => ({ latitude, longitude }))
 }
 
-const createNearbyLocation = (crime: WGS84Crime, maxDistance: number = 2) => {
+const createNearbyLocation = (crime: WGS84Crime, maxDistance: number = 4) => {
   const location = faker.location.nearbyGPSCoordinate({
     origin: [crime.latitude, crime.longitude],
     radius: maxDistance,
@@ -40,7 +40,12 @@ const createNearbyLocation = (crime: WGS84Crime, maxDistance: number = 2) => {
   return { latitude: location[0], longitude: location[1] }
 }
 
-const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date): Array<DevicePosition> => {
+const createTrailAlongRoute = (
+  deviceId: number,
+  personId: number,
+  segments: Array<Coordinate>,
+  startTimestamp: Date,
+): Array<DevicePosition> => {
   const positions: Array<DevicePosition> = []
 
   let currentSegmentIndex = 0
@@ -66,12 +71,15 @@ const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date
 
       const position = createRandomGpsNoise(interpolatePosition(segmentStart, segmentEnd, progress))
 
-      positions.push({
-        ...createRandomDevicePosition(),
-        latitude: position.latitude,
-        longitude: position.longitude,
-        timestamp,
-      })
+      positions.push(
+        createRandomDevicePosition({
+          deviceId,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          personId,
+          timestamp,
+        }),
+      )
 
       // Progress time and distance by 60s
       distanceAlongSegment += createRandomWalkingSpeed() * 60
@@ -88,12 +96,16 @@ const createTrailAlongRoute = (segments: Array<Coordinate>, startTimestamp: Date
   return positions
 }
 
-const createTrailPassingThroughCrimeLocation = async (crime: WGS84Crime): Promise<Array<DevicePosition>> => {
+const createTrailPassingThroughCrimeLocation = async (
+  deviceId: number,
+  personId: number,
+  crime: WGS84Crime,
+): Promise<Array<DevicePosition>> => {
   const start = createNearbyLocation(crime)
   const end = createNearbyLocation(crime)
   const coordinates = await createRoute([start, crime, end])
 
-  return createTrailAlongRoute(coordinates, crime.crimeDateTimeFrom)
+  return createTrailAlongRoute(deviceId, personId, coordinates, crime.crimeDateTimeFrom)
 }
 
 export default createTrailPassingThroughCrimeLocation

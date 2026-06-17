@@ -5,6 +5,7 @@ type DeviceActivation = {
   device_id: number
   device_activation_date: Date
   device_deactivation_date: Date | null
+  personId: number
   positions: Array<DevicePosition>
 }
 
