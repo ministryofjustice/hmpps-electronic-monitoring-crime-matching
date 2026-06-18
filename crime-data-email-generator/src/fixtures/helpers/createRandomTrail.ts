@@ -111,6 +111,8 @@ const createRandomWalkingDistance = (intervalSeconds: number) => {
  * @returns An array of generated device positions ordered by timestamp.
  */
 const createRandomTrail = (
+  deviceId: number,
+  personId: number,
   startLat: number = faker.location.latitude({ min: 49.87, max: 55.81 }),
   startLng: number = faker.location.longitude({ min: -6, max: 1.9 }),
   startTimestamp: Date = new Date(),
@@ -126,12 +128,13 @@ const createRandomTrail = (
   let timestamp = startTimestamp
 
   const points: DevicePosition[] = [
-    {
-      ...createRandomDevicePosition(),
+    createRandomDevicePosition({
+      deviceId,
       latitude: lat,
       longitude: lng,
+      personId,
       timestamp,
-    },
+    }),
   ]
 
   for (let i = 0; i < count; i += 1) {
@@ -152,12 +155,15 @@ const createRandomTrail = (
 
     timestamp = new Date(timestamp.getTime() + intervalSeconds * 1000)
 
-    points.push({
-      ...createRandomDevicePosition(),
-      latitude: lat,
-      longitude: lng,
-      timestamp,
-    })
+    points.push(
+      createRandomDevicePosition({
+        deviceId,
+        latitude: lat,
+        longitude: lng,
+        personId,
+        timestamp,
+      }),
+    )
   }
 
   return points

@@ -5,6 +5,7 @@ type DeviceWearer = {
   firstName: string
   lastName: string
   nomisId: string
+  mdssPersonId: number
   pncId: string
   dateOfBirth: Date
   responsibleOfficerName: string
