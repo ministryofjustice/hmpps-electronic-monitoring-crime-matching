@@ -1,6 +1,5 @@
+import { CrimeBatchLike } from '../../types/batch'
 import { CrimeLike } from '../../types/crime'
-import File from '../../types/file'
-import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 import createRandomBatchID from '../helpers/createRandomBatchId'
 import createRandomCrime from '../helpers/createRandomCrime'
 import createRandomEasting from '../helpers/createRandomEasting'
@@ -8,7 +7,7 @@ import createRandomNorthing from '../helpers/createRandomNorthing'
 import createRandomPFA from '../helpers/createRandomPfa'
 import lookupPfaShortcode from '../helpers/lookupPfaShortCode'
 
-const createBatchWithAllColumnValidations = (): File => {
+const createBatchWithAllColumnValidations = (): CrimeBatchLike => {
   const pfa = createRandomPFA()
   const batchId = createRandomBatchID(pfa)
   const crimes: Array<CrimeLike> = [
@@ -141,8 +140,8 @@ const createBatchWithAllColumnValidations = (): File => {
   ]
 
   return {
-    name: 'batch-with-all-column-validation-errors.csv',
-    content: createCsvFromCrimes(crimes),
+    name: 'batch-with-all-column-validation-errors',
+    crimes,
   }
 }
 

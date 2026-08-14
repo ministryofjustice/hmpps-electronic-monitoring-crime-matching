@@ -1,6 +1,5 @@
 import faker from '../../faker'
-import Crime from '../../types/crime'
-import DevicePosition from '../../types/devicePosition'
+import Crime, { WGS84Crime } from '../../types/crime'
 import DeviceWearer from '../../types/deviceWearer'
 import createRandomDeviceActivation from '../helpers/createRandomDeviceActivation'
 import createRandomDeviceWearer from '../helpers/createRandomDeviceWearer'
@@ -11,29 +10,27 @@ type ElectronicMonitoringData = {
   deviceWearers: Array<DeviceWearer>
 }
 
-const createTrail = async (
-  deviceId: number,
-  personId: number,
-  crimes: Array<Crime>,
-): Promise<Array<DevicePosition>> => {
-  // Pick a random crime to create a trail near
-  const selectedCrime = faker.helpers.maybe(
-    () => faker.helpers.arrayElement(crimes.filter(crime => crime.datum === 'WGS84')),
-    {
-      probability: 0.2,
-    },
-  )
+/**
+ * Creates a device activation that ensures the activation date is before a crime and deactivation date is after a crime.
+ * @param personId
+ * @param crime
+ */
+const createDeviceActivationIncludingMatchedCrime = async (personId: number, crime: WGS84Crime) => {
+  const activation = createRandomDeviceActivation({
+    personId,
+    device_activation_date: faker.date.recent({
+      days: 180,
+      refDate: crime.crimeDateTimeFrom,
+    }),
+    device_deactivation_date: faker.date.soon({
+      days: 180,
+      refDate: crime.crimeDateTimeTo,
+    }),
+  })
 
-  if (selectedCrime === undefined) {
-    return createRandomTrail(deviceId, personId)
-  }
+  console.log(`\tCrime ref: ${crime.crimeReference}, device id: ${activation.device_id}`)
 
-  return createTrailPassingThroughCrimeLocation(deviceId, personId, selectedCrime)
-}
-
-const createDeviceActivationWithPositions = async (personId: number, crimes: Array<Crime>) => {
-  const activation = createRandomDeviceActivation({ personId })
-  const positions = await createTrail(activation.device_id, activation.personId, crimes)
+  const positions = await createTrailPassingThroughCrimeLocation(activation.device_id, personId, crime)
 
   return {
     ...activation,
@@ -41,10 +38,44 @@ const createDeviceActivationWithPositions = async (personId: number, crimes: Arr
   }
 }
 
+/**
+ * Create a random device activation
+ * @param personId
+ * @returns
+ */
+const createDeviceActivationWithoutMatchedCrime = async (personId: number) => {
+  const activation = createRandomDeviceActivation({
+    personId,
+  })
+
+  const positions = createRandomTrail(activation.device_id, personId)
+
+  return {
+    ...activation,
+    positions,
+  }
+}
+
+const selectCrime = (crimes: Array<Crime>): WGS84Crime | undefined =>
+  faker.helpers.maybe(() => faker.helpers.arrayElement(crimes.filter(crime => crime.datum === 'WGS84')), {
+    probability: 0.2,
+  })
+
+const createDeviceActivation = async (personId: number, crimes: Array<Crime>) => {
+  const selectedCrime = selectCrime(crimes)
+
+  if (selectedCrime) {
+    return createDeviceActivationIncludingMatchedCrime(personId, selectedCrime)
+  }
+
+  return createDeviceActivationWithoutMatchedCrime(personId)
+}
+
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
+  console.log(deviceWearer.firstName)
   const deviceActivationPromises = faker.helpers.multiple(
-    () => createDeviceActivationWithPositions(deviceWearer.mdssPersonId, crimes),
+    () => createDeviceActivation(deviceWearer.mdssPersonId, crimes),
     { count: { min: 1, max: 3 } },
   )
   const deviceActivations = await Promise.all(deviceActivationPromises)

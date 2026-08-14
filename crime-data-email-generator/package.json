@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "generate": "node dist/generator.js",
+    "create-fake-crime-data": "node dist/createFakeCrimeData.js",
+    "create-synthetic-data": "node dist/createSyntheticData.js",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
@@ -13,7 +14,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@faker-js/faker": "^10.3.0"
+    "@faker-js/faker": "^10.3.0",
+    "csv-stringify": "6.8.3"
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",

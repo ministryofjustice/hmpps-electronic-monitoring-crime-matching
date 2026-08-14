@@ -1,9 +1,8 @@
+import { CrimeBatch } from '../../types/batch'
 import Crime from '../../types/crime'
-import File from '../../types/file'
-import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 
 // Generates a batch containing a crime that will match to device data in the FMS dev environment
-const createBatchWithCrimeWithMatches = (): File => {
+const createBatchWithCrimeWithMatches = (): CrimeBatch => {
   const crimes: Array<Crime> = [
     {
       policeForceArea: 'Cheshire',
@@ -23,8 +22,8 @@ const createBatchWithCrimeWithMatches = (): File => {
   ]
 
   return {
-    name: 'batch-with-crime-with-matches.csv',
-    content: createCsvFromCrimes(crimes),
+    name: 'batch-with-crime-with-matches',
+    crimes,
   }
 }
 

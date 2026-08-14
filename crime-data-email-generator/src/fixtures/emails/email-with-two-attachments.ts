@@ -2,6 +2,7 @@ import Email from '../../types/email'
 import toBase64 from '../helpers/toBase64'
 import createValidEmail from '../helpers/createValidEmail'
 import createBatchWith10ValidCrimes from '../batches/batch-with-10-valid-crimes'
+import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 
 // Defines an email that should result in status of Error
 // Email has two attachments
@@ -11,16 +12,16 @@ const createEmailWithTwoAttachments = (): Email => {
   const batch2 = createBatchWith10ValidCrimes()
   const attachments = [
     {
-      content: toBase64(batch.content),
+      content: toBase64(createCsvFromCrimes(batch.crimes)),
       contentType: 'text/csv',
       contentTransferEncoding: 'base64',
-      filename: batch.name,
+      filename: `${batch.name}.csv`,
     },
     {
-      content: toBase64(batch2.content),
+      content: toBase64(createCsvFromCrimes(batch2.crimes)),
       contentType: 'text/csv',
       contentTransferEncoding: 'base64',
-      filename: batch2.name,
+      filename: `${batch2.name}.csv`,
     },
   ]
 

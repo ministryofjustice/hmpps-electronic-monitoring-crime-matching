@@ -1,5 +1,7 @@
-import { Faker, en } from '@faker-js/faker'
+// eslint-disable-next-line camelcase
+import { Faker, en_GB, en } from '@faker-js/faker'
 
-const faker = new Faker({ locale: [en], seed: 42 })
+// eslint-disable-next-line camelcase
+const faker = new Faker({ locale: [en_GB, en], seed: 42 })
 
 export default faker

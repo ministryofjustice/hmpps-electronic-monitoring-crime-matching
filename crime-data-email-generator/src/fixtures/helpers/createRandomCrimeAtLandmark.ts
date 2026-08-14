@@ -1,17 +1,11 @@
-import faker from '../../faker'
 import { WGS84Crime } from '../../types/crime'
 import PoliceForceArea from '../../types/policeForceArea'
 import createRandomCrime from './createRandomCrime'
-
-const landmarks = [
-  { latitude: 51.5033, longitude: -0.1195, name: 'London Eye' },
-  { latitude: 51.5155, longitude: -0.1419, name: 'Oxford Circus' },
-  { latitude: 51.5138, longitude: -0.0984, name: "St Paul's" },
-]
+import createRandomLandmark from './createRandomLandmark'
 
 const createRandomCrimeAtLandmark = (pfa: PoliceForceArea, batchId: string): WGS84Crime => {
   const crime = createRandomCrime(pfa, batchId, 'WGS84')
-  const landmark = faker.helpers.arrayElement(landmarks)
+  const landmark = createRandomLandmark()
 
   return {
     ...crime,

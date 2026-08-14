@@ -2,6 +2,7 @@ import Email from '../../types/email'
 import toBase64 from '../helpers/toBase64'
 import createValidEmail from '../helpers/createValidEmail'
 import createBatchWith100ValidCrimes from '../batches/batch-with-100-valid-crimes'
+import createCsvFromCrimes from '../helpers/createCsvFromCrimes'
 
 // Defines an email that should result in a status of "Ingested"
 // Email contains 100 random crimes
@@ -10,10 +11,10 @@ const createEmailWith100Crimes = (): Email => {
   const batch = createBatchWith100ValidCrimes()
   const attachments = [
     {
-      content: toBase64(batch.content),
+      content: toBase64(createCsvFromCrimes(batch.crimes)),
       contentType: 'text/csv',
       contentTransferEncoding: 'base64',
-      filename: batch.name,
+      filename: `${batch.name}.csv`,
     },
   ]
 

@@ -1,6 +1,7 @@
 import Email from '../../types/email'
 import toBase64 from './toBase64'
 import createBatchWith10ValidCrimes from '../batches/batch-with-10-valid-crimes'
+import createCsvFromCrimes from './createCsvFromCrimes'
 
 // Defines an email that should result in status of Ingested
 // Email has valid subject, sender and attachment with two valid crimes
@@ -10,10 +11,10 @@ const createValidEmail = (): Omit<Email, 'filename'> => {
   return {
     attachments: [
       {
-        content: toBase64(batch.content),
+        content: toBase64(createCsvFromCrimes(batch.crimes)),
         contentType: 'text/csv',
         contentTransferEncoding: 'base64',
-        filename: batch.name,
+        filename: `${batch.name}.csv`,
       },
     ],
     body: 'Hello world',
