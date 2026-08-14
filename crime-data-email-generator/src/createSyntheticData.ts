@@ -4,6 +4,7 @@ import createElectronicMonitoringData from './fixtures/electronic-monitoring/cre
 import createDevicePositionsCsvFromElectronicMonitoringData from './helpers/createDevicePositionsCsvFromElectronicMonitoringData'
 import createDeviceActivationsCsvFromElectronicMonitoringData from './helpers/createDeviceActivationsCsvFromElectronicMonitoringData'
 import createCaseloadCsvFromElectronicMonitoringData from './helpers/createCaseloadCsvFromElectronicMonitoringData'
+import createOrderActivationsPositionsCsvFromElectronicMonitoringData from './helpers/createOrderActivationsPositionsCsvFromElectronicMonitoringData'
 
 /**
  * Creates a fake batch of crimes and electronic monitoring data that will match to some crimes
@@ -34,6 +35,9 @@ const createSyntheticData = async () => {
 
   // Write caseload csv to disk
   createFile('caseload.csv', createCaseloadCsvFromElectronicMonitoringData(emData))
+
+  // Write orders activations positions csv to disk
+  createFile('orders_activations_positions.csv', createOrderActivationsPositionsCsvFromElectronicMonitoringData(emData))
 }
 
 createSyntheticData()
