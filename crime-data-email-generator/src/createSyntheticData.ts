@@ -7,12 +7,12 @@ import createCaseloadCsvFromElectronicMonitoringData from './helpers/createCasel
 
 /**
  * Creates a fake batch of crimes and electronic monitoring data that will match to some crimes
- * 
- * Generates 100 device wearers. Each device wearer has 1-3 device activations. 
+ *
+ * Generates 100 device wearers. Each device wearer has 1-3 device activations.
  * Each device activation has the chance to include position data that will match to a crime.
- * Because crimes are only generated at a small number of known locations this can result in 
+ * Because crimes are only generated at a small number of known locations this can result in
  * many device wearers matching to the same crime.
- * 
+ *
  * The output files can be uploaded to Datastore test environment or the mock Datastore deployed to
  * Cloud Platform for E2E testing of the crime matching process.
  */

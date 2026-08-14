@@ -14,7 +14,7 @@ const createValidEmail = (): Omit<Email, 'filename'> => {
         content: toBase64(createCsvFromCrimes(batch.crimes)),
         contentType: 'text/csv',
         contentTransferEncoding: 'base64',
-        filename: batch.name,
+        filename: `${batch.name}.csv`,
       },
     ],
     body: 'Hello world',

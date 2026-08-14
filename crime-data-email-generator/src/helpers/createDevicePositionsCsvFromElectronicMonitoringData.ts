@@ -1,3 +1,4 @@
+import { stringify } from 'csv-stringify/sync'
 import { ElectronicMonitoringData } from '../fixtures/electronic-monitoring/createElectronicMonitoringData'
 import { toAthenaTimestamp } from './formatters'
 
@@ -20,38 +21,36 @@ const columns = [
   'position_satellite',
   'position_speed',
   'position_uploaded_date',
-].join(',')
+]
 
 const createDevicePositionsCSVFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {
   const positions = data.deviceWearers.flatMap(deviceWearer =>
     deviceWearer.deviceActivations.flatMap(activation => activation.positions),
   )
 
-  return [
+  return stringify([
     columns,
-    ...positions.map(position =>
-      [
-        '',
-        position.deviceId,
-        position.id,
-        position.personId,
-        '',
-        position.direction,
-        '',
-        toAthenaTimestamp(position.timestamp),
-        '',
-        position.id,
-        position.latitude,
-        position.geolocationMechanism,
-        position.longitude,
-        position.precision,
-        toAthenaTimestamp(position.timestamp),
-        '',
-        position.speed,
-        '',
-      ].join(','),
-    ),
-  ].join('\n')
+    ...positions.map(position => [
+      '',
+      position.deviceId,
+      position.id,
+      position.personId,
+      '',
+      position.direction,
+      '',
+      toAthenaTimestamp(position.timestamp),
+      '',
+      position.id,
+      position.latitude,
+      position.geolocationMechanism,
+      position.longitude,
+      position.precision,
+      toAthenaTimestamp(position.timestamp),
+      '',
+      position.speed,
+      '',
+    ]),
+  ])
 }
 
 export default createDevicePositionsCSVFromElectronicMonitoringData

@@ -21,7 +21,7 @@ const createEmailWithTwoAttachments = (): Email => {
       content: toBase64(createCsvFromCrimes(batch2.crimes)),
       contentType: 'text/csv',
       contentTransferEncoding: 'base64',
-      filename: batch2.name,
+      filename: `${batch2.name}.csv`,
     },
   ]
 

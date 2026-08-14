@@ -1,3 +1,4 @@
+import { stringify } from 'csv-stringify/sync'
 import { ElectronicMonitoringData } from '../fixtures/electronic-monitoring/createElectronicMonitoringData'
 import { toAthenaDate } from './formatters'
 
@@ -25,39 +26,37 @@ const columns = [
   'responsible_organisation',
   'responsible_officer_name',
   'is_monitored',
-].join(',')
+]
 
 const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {
-  return [
+  return stringify([
     columns,
-    ...data.deviceWearers.map(deviceWearer =>
-      [
-        '',
-        deviceWearer.uniqueDeviceWearerId,
-        deviceWearer.firstName,
-        deviceWearer.lastName,
-        toAthenaDate(deviceWearer.dateOfBirth),
-        deviceWearer.houseNumberAndStreetName,
-        deviceWearer.cityOrTown,
-        '',
-        '',
-        deviceWearer.postcode,
-        deviceWearer.nomisId,
-        deviceWearer.pncId,
-        deviceWearer.mdssPersonId,
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        deviceWearer.responsibleOfficerName,
-        '',
-        '',
-      ].join(','),
-    ),
-  ].join('\n')
+    ...data.deviceWearers.map(deviceWearer => [
+      '',
+      deviceWearer.uniqueDeviceWearerId,
+      deviceWearer.firstName,
+      deviceWearer.lastName,
+      toAthenaDate(deviceWearer.dateOfBirth),
+      deviceWearer.houseNumberAndStreetName,
+      deviceWearer.cityOrTown,
+      '',
+      '',
+      deviceWearer.postcode,
+      deviceWearer.nomisId,
+      deviceWearer.pncId,
+      deviceWearer.mdssPersonId,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      deviceWearer.responsibleOfficerName,
+      '',
+      '',
+    ]),
+  ])
 }
 
 export default createCaseloadCsvFromElectronicMonitoringData
