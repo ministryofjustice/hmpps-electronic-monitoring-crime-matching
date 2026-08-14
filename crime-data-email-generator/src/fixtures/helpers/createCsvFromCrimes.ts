@@ -17,7 +17,7 @@ const createCsvFromCrimes = (crimes: Array<CrimeLike>): string => {
       crime.latitude === null ? '' : crime.latitude,
       crime.longitude === null ? '' : crime.longitude,
       crime.datum,
-      `"${crime.crimeText}"`,
+      crime.crimeText,
     ]),
   )
 }
