@@ -9,13 +9,14 @@ const createRandomDeviceActivation = (overrides: Partial<DeviceActivation> = {})
       days: 365,
       refDate: activationDate,
     }),
-    null,
+    new Date(2099, 11, 12, 23, 59, 59), // 12/12/2099 23:59:59 - Datastore sentinel value for device activation with no end data
   ])
 
   return {
     device_activation_date: activationDate,
     device_deactivation_date: deactivationDate,
     device_activation_id: faker.number.int(),
+    device_serial_number: parseInt(faker.string.numeric({ length: 9, allowLeadingZeros: false }), 10),
     device_id: faker.number.int(),
     personId: faker.number.int(),
     positions: [],

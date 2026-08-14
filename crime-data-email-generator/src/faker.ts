@@ -1,5 +1,5 @@
-import { Faker, en } from '@faker-js/faker'
+import { Faker, en_GB, en } from '@faker-js/faker'
 
-const faker = new Faker({ locale: [en], seed: 42 })
+const faker = new Faker({ locale: [en_GB, en], seed: 42 })
 
 export default faker
