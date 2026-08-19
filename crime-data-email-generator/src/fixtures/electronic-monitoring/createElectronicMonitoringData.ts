@@ -15,7 +15,11 @@ type ElectronicMonitoringData = {
  * @param personId
  * @param crime
  */
-const createDeviceActivationIncludingMatchedCrime = async (personId: number, crime: WGS84Crime) => {
+const createDeviceActivationIncludingMatchedCrime = async (
+    personId: number,
+    crime: WGS84Crime,
+    passThroughCount: number = 1
+) => {
   const activation = createRandomDeviceActivation({
     personId,
     device_activation_date: faker.date.recent({
@@ -30,7 +34,12 @@ const createDeviceActivationIncludingMatchedCrime = async (personId: number, cri
 
   console.log(`\tCrime ref: ${crime.crimeReference}, device id: ${activation.device_id}`)
 
-  const positions = await createTrailPassingThroughCrimeLocation(activation.device_id, personId, crime)
+  const positions = await createTrailPassingThroughCrimeLocation(
+      activation.device_id,
+      personId,
+      crime,
+      passThroughCount,
+  )
 
   return {
     ...activation,
@@ -93,6 +102,22 @@ const createElectronicMonitoringData = async (
   return {
     deviceWearers: await Promise.all([...Array(deviceWearerCount)].map(() => createDeviceWearer(crimes))),
   }
+}
+
+export const createDeviceWearerPassingCrimeNTimes = async (
+    crimes: Array<Crime>, passThroughCount: number
+): Promise<DeviceWearer> => {
+  const deviceWearer = createRandomDeviceWearer()
+  const crime = crimes.find((c): c is WGS84Crime => c.datum === 'WGS84')
+  if (!crime) throw new Error('No WGS84 crime available')
+
+  const activation = await createDeviceActivationIncludingMatchedCrime(
+      deviceWearer.mdssPersonId,
+      crime,
+      passThroughCount,
+  )
+
+  return { ...deviceWearer, deviceActivations: [activation] }
 }
 
 export { ElectronicMonitoringData }

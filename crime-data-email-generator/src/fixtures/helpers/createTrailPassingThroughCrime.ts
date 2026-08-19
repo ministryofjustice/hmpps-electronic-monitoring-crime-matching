@@ -16,6 +16,8 @@ type OSRMResponse = {
   }>
 }
 
+const PASS_INTERVAL_MINUTES = 1
+
 /**
  * Plan a route using the Open Source Routing Machine
  */
@@ -100,12 +102,21 @@ const createTrailPassingThroughCrimeLocation = async (
   deviceId: number,
   personId: number,
   crime: WGS84Crime,
+  passThroughCount = 1,
 ): Promise<Array<DevicePosition>> => {
-  const start = createNearbyLocation(crime)
-  const end = createNearbyLocation(crime)
-  const coordinates = await createRoute([start, crime, end])
+  const safePassThroughCount = Math.max(1, Math.floor(passThroughCount))
+  const trails = await Promise.all(
+      [...Array(safePassThroughCount)].map(async (_, index) => {
+        const start = createNearbyLocation(crime)
+        const end = createNearbyLocation(crime)
+        const coordinates = await createRoute([start, crime, end])
+        const startTimestamp = new Date(crime.crimeDateTimeFrom.getTime() + index * PASS_INTERVAL_MINUTES * 60_000)
 
-  return createTrailAlongRoute(deviceId, personId, coordinates, crime.crimeDateTimeFrom)
+        return createTrailAlongRoute(deviceId, personId, coordinates, startTimestamp)
+      }),
+  )
+
+  return trails.flat()
 }
 
 export default createTrailPassingThroughCrimeLocation

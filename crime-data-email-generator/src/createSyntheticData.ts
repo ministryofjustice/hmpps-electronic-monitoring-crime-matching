@@ -1,6 +1,8 @@
 import createBatchWith100ValidCrimesAtLandmarks from './fixtures/batches/batch-with-100-valid-crimes-at-landmarks'
 import { createCsvFileFromBatch, createFile } from './helpers/fs'
-import createElectronicMonitoringData from './fixtures/electronic-monitoring/createElectronicMonitoringData'
+import createElectronicMonitoringData, {
+  createDeviceWearerPassingCrimeNTimes
+} from './fixtures/electronic-monitoring/createElectronicMonitoringData'
 import createDevicePositionsCsvFromElectronicMonitoringData from './helpers/createDevicePositionsCsvFromElectronicMonitoringData'
 import createDeviceActivationsCsvFromElectronicMonitoringData from './helpers/createDeviceActivationsCsvFromElectronicMonitoringData'
 import createCaseloadCsvFromElectronicMonitoringData from './helpers/createCaseloadCsvFromElectronicMonitoringData'
@@ -25,7 +27,12 @@ const createSyntheticData = async () => {
   createCsvFileFromBatch(batch)
 
   // Generate electronic monitoring data w/ some device wearers passing by crime locations
-  const emData = await createElectronicMonitoringData(100, batch.crimes)
+  const forcedWearer = await createDeviceWearerPassingCrimeNTimes(batch.crimes, 27)
+  const randomData = await createElectronicMonitoringData(0, batch.crimes)
+
+  const emData = {
+    deviceWearers: [forcedWearer, ...randomData.deviceWearers],
+  }
 
   // Write positions csv to disk
   createFile('positions.csv', createDevicePositionsCsvFromElectronicMonitoringData(emData))
