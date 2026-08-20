@@ -2,7 +2,7 @@ import faker from '../../faker'
 import Crime, { WGS84Crime } from '../../types/crime'
 import DeviceActivation from '../../types/deviceActivation'
 import DeviceWearer from '../../types/deviceWearer'
-import { DEVICE_ACTIVATION_NOT_DEACTIVATED_SENTINEL_VALUE } from '../constants'
+import { DEVICE_ACTIVE_SENTINEL_VALUE } from '../constants'
 import createRandomDeviceActivation from '../helpers/createRandomDeviceActivation'
 import createRandomDeviceWearer from '../helpers/createRandomDeviceWearer'
 import createRandomTrail from '../helpers/createRandomTrail'
@@ -50,8 +50,7 @@ const createDeviceActivationWithoutMatchedCrime = async (personId: number) => {
     personId,
   })
 
-  const isDeactivatedActivation =
-    activation.device_deactivation_date !== DEVICE_ACTIVATION_NOT_DEACTIVATED_SENTINEL_VALUE
+  const isDeactivatedActivation = activation.device_deactivation_date !== DEVICE_ACTIVE_SENTINEL_VALUE
 
   // Create a start time for trial within the device activation or if the device activation is active,
   // create start time within first 30 days of activation
