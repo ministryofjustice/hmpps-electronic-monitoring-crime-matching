@@ -113,9 +113,9 @@ const createRandomWalkingDistance = (intervalSeconds: number) => {
 const createRandomTrail = (
   deviceId: number,
   personId: number,
+  startTimestamp: Date,
   startLat: number = faker.location.latitude({ min: 49.87, max: 55.81 }),
   startLng: number = faker.location.longitude({ min: -6, max: 1.9 }),
-  startTimestamp: Date = new Date(),
   count = faker.number.int({ min: 50, max: 100 }),
   intervalSeconds = 60,
 ): Array<DevicePosition> => {

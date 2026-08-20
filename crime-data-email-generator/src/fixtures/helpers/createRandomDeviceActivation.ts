@@ -1,5 +1,6 @@
 import faker from '../../faker'
 import DeviceActivation from '../../types/deviceActivation'
+import { DEVICE_ACTIVATION_NOT_DEACTIVATED_SENTINEL_VALUE } from '../constants'
 
 const createRandomDeviceActivation = (overrides: Partial<DeviceActivation> = {}): DeviceActivation => {
   const activationDate = faker.date.between({ from: '2025-01-01', to: '2025-12-31' })
@@ -9,7 +10,7 @@ const createRandomDeviceActivation = (overrides: Partial<DeviceActivation> = {})
       days: 365,
       refDate: activationDate,
     }),
-    new Date('2999-12-12T23:59:59.000Z'), // 12/12/2999 23:59:59 - Datastore sentinel value for device activation with no end data
+    DEVICE_ACTIVATION_NOT_DEACTIVATED_SENTINEL_VALUE, // 12/12/2999 23:59:59 - Datastore sentinel value for device activation with no end data
   ])
 
   return {
