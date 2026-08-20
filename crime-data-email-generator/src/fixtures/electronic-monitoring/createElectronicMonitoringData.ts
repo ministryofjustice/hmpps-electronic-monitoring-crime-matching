@@ -1,6 +1,8 @@
 import faker from '../../faker'
 import Crime, { WGS84Crime } from '../../types/crime'
+import DeviceActivation from '../../types/deviceActivation'
 import DeviceWearer from '../../types/deviceWearer'
+import { DEVICE_ACTIVE_SENTINEL_VALUE } from '../constants'
 import createRandomDeviceActivation from '../helpers/createRandomDeviceActivation'
 import createRandomDeviceWearer from '../helpers/createRandomDeviceWearer'
 import createRandomTrail from '../helpers/createRandomTrail'
@@ -48,7 +50,18 @@ const createDeviceActivationWithoutMatchedCrime = async (personId: number) => {
     personId,
   })
 
-  const positions = createRandomTrail(activation.device_id, personId)
+  const isDeactivatedActivation = activation.device_deactivation_date !== DEVICE_ACTIVE_SENTINEL_VALUE
+
+  // Create a start time for trial within the device activation or if the device activation is active,
+  // create start time within first 30 days of activation
+  const startTimestamp = faker.date.between({
+    from: activation.device_activation_date,
+    to: isDeactivatedActivation
+      ? activation.device_deactivation_date
+      : faker.date.soon({ days: 30, refDate: activation.device_activation_date }),
+  })
+
+  const positions = createRandomTrail(activation.device_id, personId, startTimestamp)
 
   return {
     ...activation,
@@ -73,12 +86,12 @@ const createDeviceActivation = async (personId: number, crimes: Array<Crime>) =>
 
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
+  const deviceActivations: Array<DeviceActivation> = []
   console.log(deviceWearer.firstName)
-  const deviceActivationPromises = faker.helpers.multiple(
-    () => createDeviceActivation(deviceWearer.mdssPersonId, crimes),
-    { count: { min: 1, max: 3 } },
-  )
-  const deviceActivations = await Promise.all(deviceActivationPromises)
+
+  for (let i = 0; i < faker.number.int({ min: 1, max: 3 }); i += 1) {
+    deviceActivations.push(await createDeviceActivation(deviceWearer.mdssPersonId, crimes))
+  }
 
   return {
     ...deviceWearer,
@@ -90,9 +103,13 @@ const createElectronicMonitoringData = async (
   deviceWearerCount: number,
   crimes: Array<Crime>,
 ): Promise<ElectronicMonitoringData> => {
-  return {
-    deviceWearers: await Promise.all([...Array(deviceWearerCount)].map(() => createDeviceWearer(crimes))),
+  const deviceWearers: Array<DeviceWearer> = []
+
+  for (let i = 0; i < deviceWearerCount; i += 1) {
+    deviceWearers.push(await createDeviceWearer(crimes))
   }
+
+  return { deviceWearers }
 }
 
 export { ElectronicMonitoringData }

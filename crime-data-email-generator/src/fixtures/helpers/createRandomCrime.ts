@@ -57,7 +57,7 @@ const createRandomOSGB36Crime = (
 }
 
 const createRandomCrime = (pfa: PoliceForceArea, batchId: string, datum: Datum = createRandomDatum()): Crime => {
-  const crimeDateTimeFrom = faker.date.past({ years: 5 })
+  const crimeDateTimeFrom = faker.date.past({ years: 5, refDate: new Date('2026-01-01T00:00:00.000Z') })
   const crimeDateTimeTo = faker.date.between({
     from: crimeDateTimeFrom,
     to: new Date(crimeDateTimeFrom.getTime() + 12 * 60 * 60 * 1000),
