@@ -1,0 +1,21 @@
+From: test@email.com
+Subject: Crime Mapping Request
+Date: Wed, 15 Oct 2025 13:56:58 +0000
+MIME-Version: 1.0
+Resent-From: <shared-mailbox@email.com>
+Content-Type: multipart/mixed; boundary="----=_Part_50af36e1-1938-40d7-b610-c60e6ef98483"
+
+------=_Part_50af36e1-1938-40d7-b610-c60e6ef98483
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Hello world
+
+------=_Part_50af36e1-1938-40d7-b610-c60e6ef98483
+Content-Type: text/csv; name="batch-with-utc-and-bst-dates.csv"
+Content-Disposition: attachment; filename="batch-with-utc-and-bst-dates.csv"
+Content-Transfer-Encoding: base64
+
+R2xvdWNlc3RlcnNoaXJlLEFCLCxHTEMyMDI2MDIxOCxZZ0VrTDhZc2U0YSwyMDI1MDIwMTAwMDAwMCwyMDI1MDIwMTAwMDAwMCwsLDUyLjk1NzQ1NzI1NDQyMjc0LC0zLjMzNzY3NDkwNjE5MjgzOCxXR1M4NCwiQ3JpbWUgZGF0ZSBpcyByZXBvcnRlZCBpbiBHTVQsIGNvbnZlcnRlZCB0byBVVEMgYnkgUEZBIgpHbG91Y2VzdGVyc2hpcmUsVE9NViwsR0xDMjAyNjAyMTgsSGFhMkpGdFFOQVIsMjAyNTA3MTUyMzAwMDAsMjAyNTA3MTYxMTAwMDAsMTIzNTA0LDE0NTQ5NSwsLE9TR0IzNiwiQ3JpbWUgZGF0ZSBpcyByZXBvcnRlZCBpbiBCU1QsIGNvbnZlcnRlZCB0byBVVEMgYnkgUEZBIg==
+
+------=_Part_50af36e1-1938-40d7-b610-c60e6ef98483--

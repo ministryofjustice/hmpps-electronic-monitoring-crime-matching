@@ -38,7 +38,7 @@ services:
     container_name: wiremock
     restart: always
     ports:
-      - "9091:8080"
+      - "9091:9091"
     volumes:
       - ./wiremock/mappings:/home/wiremock/mappings
 
@@ -48,7 +48,7 @@ services:
       args:
         GIT_REF: 21345
         GIT_BRANCH: main
-        BUILD_NUMBER: "2026-08-21"
+        BUILD_NUMBER: "2026-08-27"
     depends_on:
       - db
       - localstack
@@ -105,6 +105,7 @@ services:
       - DATASTORE__ROLE_ARN=${DATASTORE__ROLE_ARN}
       - DATASTORE__OUTPUT_BUCKET=${DATASTORE__OUTPUT_BUCKET}
       - DATASTORE__DATABASE=${DATASTORE__DATABASE}
+      - DATASTORE__WORKGROUP=${DATASTORE__WORKGROUP}
       - ATHENA_QUERY_DUMP_BUCKET=${DATASTORE__OUTPUT_BUCKET}
       - ALGORITHM__ADD_TIME=10
       - ALGORITHM__CRIME_DIST=100
