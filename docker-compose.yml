@@ -1,0 +1,152 @@
+services:
+
+  db:
+    image: postgres:latest
+    networks:
+      - hmpps
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+
+  localstack:
+    image: localstack/localstack:3.8
+    container_name: localstack
+    networks:
+      - hmpps
+    ports:
+      - "4566:4566"
+    healthcheck:
+      test: 'curl localhost:4566/_localstack/init | grep -q ''"READY": true'''
+      interval: 60s
+      timeout: 2s
+      retries: 10
+    environment:
+      - SERVICES=s3,sns,sqs,sts
+      - DEBUG=${DEBUG- }
+    volumes:
+      - "./localstack/init:/etc/localstack/init/ready.d"
+      - "./localstack/seed:/seed:ro"
+
+  wiremock:
+    image: wiremock/wiremock
+    networks:
+      - hmpps
+    container_name: wiremock
+    restart: always
+    ports:
+      - "9091:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+
+  api:
+    build:
+      context: ./hmpps-electronic-monitoring-crime-matching-api
+      args:
+        GIT_REF: 21345
+        GIT_BRANCH: main
+        BUILD_NUMBER: "2026-08-21"
+    depends_on:
+      - db
+      - localstack
+    networks:
+      - hmpps
+    container_name: api
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_ENDPOINT_URL=${AWS_ENDPOINT_URL}
+      - AWS_ENDPOINT_URL_ATHENA=${AWS_ENDPOINT_URL_ATHENA}
+      - ATHENA_GENERAL_IAM_ROLE=${DATASTORE__ROLE_ARN}
+      - SERVER_PORT=8080
+      - HMPPS_AUTH_URL=${HMPPS_AUTH__URL}
+      - SPRING_PROFILES_ACTIVE=docker
+      - ATHENA_OUTPUT_BUCKET=${DATASTORE__OUTPUT_BUCKET}
+      - ATHENA_WORKGROUP=${ATHENA_WORKGROUP}
+      - HMPPS_SQS_PROVIDER=localstack
+      - HMPPS_SQS_LOCALSTACKURL=http://localstack:4566
+      - DATASTORE__DATABASE=${DATASTORE__DATABASE}
+
+  algorithm:
+    build: ./hmpps-electronic-monitoring-crime-matching-algorithm
+    depends_on:
+      - localstack
+      - api
+    ports:
+      - "5000:5000"
+    networks:
+      - hmpps
+    container_name: algorithm
+    volumes:
+      - "./output:/output"
+    environment:
+      - APP_GIT_REF=unknown
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_ENDPOINT_URL=${AWS_ENDPOINT_URL}
+      - AWS_ENDPOINT_URL_SQS=${AWS_ENDPOINT_URL_SQS}
+      - AWS_ENDPOINT_URL_ATHENA=${AWS_ENDPOINT_URL_ATHENA}
+      - AWS_DEFAULT_REGION=eu-west-2
+      - LISTENER__NAME=matching-notifications-queue
+      - QUEUE__URL=http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/matching-queue
+      - HMPPS_AUTH__URL=${HMPPS_AUTH__URL}
+      - HMPPS_AUTH__SYSTEM_CLIENT_ID=${ALGO__CLIENT_CREDS_CLIENT_ID}
+      - HMPPS_AUTH__SYSTEM_CLIENT_SECRET=${ALGO__CLIENT_CREDS_SYSTEM_CLIENT_SECRET}
+      - CRIME_MATCHING_API__URL=http://api:8080
+      - DATASTORE__ROLE_ARN=${DATASTORE__ROLE_ARN}
+      - DATASTORE__OUTPUT_BUCKET=${DATASTORE__OUTPUT_BUCKET}
+      - DATASTORE__DATABASE=${DATASTORE__DATABASE}
+      - ATHENA_QUERY_DUMP_BUCKET=${DATASTORE__OUTPUT_BUCKET}
+      - ALGORITHM__ADD_TIME=10
+      - ALGORITHM__CRIME_DIST=100
+      - ALGORITHM__SEQUENCING=True
+      - ALGORITHM__INCLUDE_PRIOR_LOCS=True
+      - ALGORITHM__TRIANGLES=8
+      - ALGORITHM__OVERLAP_THRESHOLD=50
+      - ALGORITHM__MAX_WINDOW_MINS=720
+      - ALGORITHM__CAP_CRIME_WINDOW=False
+      - ALGORITHM__PRE_FILTER_DISTANCE=5000
+
+  ui:
+    build:
+      context: ./hmpps-electronic-monitoring-crime-matching-ui
+      args:
+        BUILD_NUMBER: "1.0.0"
+        GIT_REF: "a1b2c3"
+        GIT_BRANCH: main
+    restart: "no"
+    networks:
+      - hmpps
+    container_name: ui
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000/health"]
+    environment:
+      - HMPPS_AUTH_URL=${HMPPS_AUTH__URL}
+      - TOKEN_VERIFICATION_API_URL=${HMPPS_AUTH__URL}
+      - TOKEN_VERIFICATION_ENABLED=false
+      - REDIS_ENABLED=false
+      - NODE_ENV=development
+      - AUTH_CODE_CLIENT_ID=${UI__AUTH_CODE_CLIENT_ID}
+      - AUTH_CODE_CLIENT_SECRET=${UI__AUTH_CODE_CLIENT_SECRET}
+      - CLIENT_CREDS_CLIENT_ID=${UI__CLIENT_CREDS_CLIENT_ID}
+      - CLIENT_CREDS_CLIENT_SECRET=${UI__CLIENT_CREDS_CLIENT_SECRET}
+      - ENVIRONMENT_NAME=dev
+      - OS_MAPS_API_KEY=${UI__OS_MAPS_API_KEY}
+      - OS_MAPS_API_SECRET=${UI__OS_MAPS_API_SECRET}
+      - EM_CRIME_MATCHING_API_URL=http://api:8080
+      - COMPONENT_API_URL=https://probation-frontend-components-dev.hmpps.service.justice.gov.uk
+      - NO_HTTPS=true
+
+networks:
+  hmpps:

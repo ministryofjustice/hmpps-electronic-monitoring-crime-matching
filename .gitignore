@@ -1,0 +1,8 @@
+hmpps-electronic-monitoring-components/
+hmpps-electronic-monitoring-crime-matching-algorithm/
+hmpps-electronic-monitoring-crime-matching-api/
+hmpps-electronic-monitoring-crime-matching-ui/
+
+.env
+
+.DS_Store
