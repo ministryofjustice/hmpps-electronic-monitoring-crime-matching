@@ -1,27 +1,13 @@
-import createRandomBatchID from './fixtures/helpers/createRandomBatchId'
-import createRandomCrimeAtLandmark from './fixtures/helpers/createRandomCrimeAtLandmark'
-import createRandomPFA from './fixtures/helpers/createRandomPfa'
 import createElectronicMonitoringEdgeCaseData from './fixtures/electronic-monitoring/createElectronicMonitoringEdgeCaseData'
 import createCaseloadCsvFromElectronicMonitoringData from './helpers/createCaseloadCsvFromElectronicMonitoringData'
 import createDeviceActivationsCsvFromElectronicMonitoringData from './helpers/createDeviceActivationsCsvFromElectronicMonitoringData'
 import createDevicePositionsCsvFromElectronicMonitoringData from './helpers/createDevicePositionsCsvFromElectronicMonitoringData'
 import createOrderActivationsPositionsCsvFromElectronicMonitoringData from './helpers/createOrderActivationsPositionsCsvFromElectronicMonitoringData'
 import { createCsvFileFromBatch, createFile } from './helpers/fs'
-import { CrimeBatch } from './types/batch'
-
-const createSingleCrimeBatch = (): CrimeBatch => {
-  const pfa = createRandomPFA()
-  const batchId = createRandomBatchID(pfa)
-  const crime = createRandomCrimeAtLandmark(pfa, batchId)
-
-  return {
-    name: 'batch-with-single-crime-edge-case-radius-crossings',
-    crimes: [crime],
-  }
-}
+import createBatchWithCrimeWithMatches from './fixtures/batches/batch-with-crime-with-matches'
 
 const createSyntheticEdgeCaseData = () => {
-  const batch = createSingleCrimeBatch()
+  const batch = createBatchWithCrimeWithMatches()
 
   createCsvFileFromBatch(batch)
 

@@ -9,7 +9,7 @@ import DevicePosition from '../../types/devicePosition'
 import { GeolocationMechanisms } from '../../types/geolocationMechanism'
 
 const POSITION_INTERVAL_MS = 20 * 1000
-const SEQUENCE_COUNT = 27
+const SEQUENCE_COUNT = 27 // Exceeds alphabet limit
 const INSIDE_POINTS_PER_SEQUENCE = 2
 
 const metresToLatitudeDegrees = (metres: number): number => metres / METRES_PER_DEGREE_LATITUDE
@@ -17,6 +17,7 @@ const metresToLatitudeDegrees = (metres: number): number => metres / METRES_PER_
 const metresToLongitudeDegrees = (metres: number, latitude: number): number =>
   metres / (METRES_PER_DEGREE_LATITUDE * Math.cos((latitude * Math.PI) / 180))
 
+// Creates a point at a distance and angle from the crime location
 const createPointAtDistance = (crime: WGS84Crime, metres: number): { latitude: number; longitude: number } => {
   const theta = faker.number.float({ min: 0, max: 2 * Math.PI, fractionDigits: 12 })
   const latitudeOffset = metresToLatitudeDegrees(metres * Math.sin(theta))
@@ -49,35 +50,25 @@ const createPosition = (
 
 const createEdgeCasePositions = (crime: WGS84Crime, deviceId: number, personId: number): Array<DevicePosition> => {
   const positions: Array<DevicePosition> = []
-  let timestamp = new Date('2024-08-29T22:50:48.000Z')
+  let timestamp = crime.crimeDateTimeFrom
 
-  // While less than 45 in sequence
   for (let sequence = 0; sequence < SEQUENCE_COUNT; sequence += 1) {
-    // Create one outside radius initial position
-    const outsideBefore = createPointAtDistance(
-      crime,
-      faker.number.float({ min: 100, max: 150, fractionDigits: 6 }),
-    )
+    // Create one initial position outside the radius
+    const outsideBefore = createPointAtDistance(crime, faker.number.float({ min: 100, max: 150, fractionDigits: 6 }))
 
     positions.push(createPosition(deviceId, personId, timestamp, outsideBefore.latitude, outsideBefore.longitude))
     timestamp = new Date(timestamp.getTime() + POSITION_INTERVAL_MS)
 
-    // Create two positions inside radius
+    // Create two positions inside the radius
     for (let i = 0; i < INSIDE_POINTS_PER_SEQUENCE; i += 1) {
-      const inside = createPointAtDistance(
-        crime,
-        faker.number.float({ min: 5, max: 70, fractionDigits: 6 }),
-      )
+      const inside = createPointAtDistance(crime, faker.number.float({ min: 5, max: 70, fractionDigits: 6 }))
 
       positions.push(createPosition(deviceId, personId, timestamp, inside.latitude, inside.longitude))
       timestamp = new Date(timestamp.getTime() + POSITION_INTERVAL_MS)
     }
 
-    // Create one position outside radius
-    const outsideAfter = createPointAtDistance(
-      crime,
-      faker.number.float({ min: 100, max: 150, fractionDigits: 6 }),
-    )
+    // Create one final position outside the radius
+    const outsideAfter = createPointAtDistance(crime, faker.number.float({ min: 100, max: 150, fractionDigits: 6 }))
 
     positions.push(createPosition(deviceId, personId, timestamp, outsideAfter.latitude, outsideAfter.longitude))
     timestamp = new Date(timestamp.getTime() + POSITION_INTERVAL_MS)
