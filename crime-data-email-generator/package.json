@@ -6,6 +6,7 @@
     "build": "tsc",
     "create-fake-crime-data": "node dist/createFakeCrimeData.js",
     "create-synthetic-data": "node dist/createSyntheticData.js",
+    "create-synthetic-edge-case-data": "node dist/createSyntheticEdgeCaseData.js",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"

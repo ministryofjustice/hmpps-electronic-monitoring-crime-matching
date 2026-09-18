@@ -100,6 +100,18 @@ When an activation is selected to match a crime, its activation and deactivation
 
 Because crimes are generated from a relatively small collection of landmark locations, multiple device wearers may match the same crime. The generated dataset is intended for functional and end-to-end testing rather than production-like statistical distribution.
 
+### Synthetic edge case data
+Run:
+
+```bash
+npm run create-synthetic-edge-case-data
+```
+
+This generates a crime batch with related electronic monitoring data for edge case test data, specifically the generator will currently output data for the high sequence count scenario.
+
+It creates a crime batch of one crime and one device wearer match, with positions simulating a sequence count that exceeds the alphabet limit.
+
+
 ## Using the synthetic data
 
 The generated electronic monitoring CSVs can be uploaded to either:

@@ -4,6 +4,7 @@ import { METRES_PER_DEGREE_LATITUDE } from '../constants'
 import createRandomDevicePosition from './createRandomDevicePosition'
 import createRandomGpsNoise from './createRandomGpsNoise'
 import createRandomWalkingSpeed from './createRandomWalkingSpeed'
+import { GeolocationMechanisms } from '../../types/geolocationMechanism'
 
 /**
  * Projects a geographic position by a given distance and heading.
@@ -130,6 +131,7 @@ const createRandomTrail = (
   const points: DevicePosition[] = [
     createRandomDevicePosition({
       deviceId,
+      geolocationMechanism: faker.helpers.arrayElement(Object.values(GeolocationMechanisms)),
       latitude: lat,
       longitude: lng,
       personId,

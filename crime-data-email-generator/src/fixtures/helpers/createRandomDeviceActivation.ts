@@ -10,7 +10,7 @@ const createRandomDeviceActivation = (overrides: Partial<DeviceActivation> = {})
       days: 365,
       refDate: activationDate,
     }),
-    DEVICE_ACTIVE_SENTINEL_VALUE, // 12/12/2999 23:59:59 - Datastore sentinel value for device activation with no end data
+    DEVICE_ACTIVE_SENTINEL_VALUE, // 31/12/9999 00:00:00 - Datastore sentinel value for device activation with no end data
   ])
 
   return {
