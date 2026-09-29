@@ -9,7 +9,9 @@ type DeviceWearer = {
   pncId: string
   dateOfBirth: Date
   responsibleOfficerName: string
+  country: string
   postcode: string
+  county: string
   cityOrTown: string
   houseNumberAndStreetName: string
   deviceActivations: Array<DeviceActivation>

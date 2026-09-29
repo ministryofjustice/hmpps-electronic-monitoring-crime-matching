@@ -13,7 +13,9 @@ const createRandomDeviceWearer = (overrides: Partial<DeviceWearer> = {}): Device
     responsibleOfficerName: faker.person.fullName(),
     postcode: faker.location.zipCode(),
     cityOrTown: faker.location.city(),
+    county: faker.location.state(),
     houseNumberAndStreetName: faker.location.streetAddress(),
+    country: faker.location.country(),
     deviceActivations: [],
     ...overrides,
   }
