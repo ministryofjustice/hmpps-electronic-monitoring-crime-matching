@@ -7,7 +7,7 @@
     "create-fake-crime-data": "node dist/createFakeCrimeData.js",
     "create-synthetic-data": "node dist/createSyntheticData.js",
     "create-synthetic-edge-case-data": "node dist/createSyntheticEdgeCaseData.js",
-    "deploy-synthetic-data": "./scripts/deploy-synthetic-data.sh",
+    "deploy-synthetic-data": "NODE_OPTIONS=--use-system-ca ./scripts/deploy-synthetic-data.sh",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
