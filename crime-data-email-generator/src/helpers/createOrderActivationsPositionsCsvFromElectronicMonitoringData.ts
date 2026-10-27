@@ -27,6 +27,7 @@ const columns = [
   'responsible_officer_name',
   'is_monitored',
   'caseload__datetime_added',
+  'position__datetime_added',
   'device_activation_id',
   'device_activation_date',
   'device_deactivation_date',
@@ -82,6 +83,7 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
           deviceWearer.responsibleOfficerName, // responsible_officer_name
           '', // is_monitored
           '', // caseload__datetime_added
+          '', // position__datetime_added
           activation.device_activation_id, // device_activation_id
           toAthenaTimestamp(activation.device_activation_date), // device_activation_date
           toAthenaTimestamp(activation.device_deactivation_date), // device_deactivation_date

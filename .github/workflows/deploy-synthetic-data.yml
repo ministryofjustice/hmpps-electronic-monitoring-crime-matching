@@ -1,0 +1,85 @@
+name: Deploy synthetic data
+
+# Regenerates the synthetic crime matching data and uploads it to the mock Datastore
+# S3 bucket queried by Athena in the dev environment.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'crime-data-email-generator/**'
+      - '!crime-data-email-generator/**.md'
+      - '.github/workflows/deploy-synthetic-data.yml'
+  pull_request:
+    paths:
+      - 'crime-data-email-generator/**'
+      - '.github/workflows/deploy-synthetic-data.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Generate the data without uploading it'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-synthetic-data-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: crime-data-email-generator
+
+jobs:
+  validate:
+    name: Generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Generate synthetic data (dry run)
+        run: ./scripts/deploy-synthetic-data.sh --dry-run
+
+  deploy:
+    name: Upload to dev mock Datastore
+    needs: validate
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run)
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Authenticate with Cloud Platform
+        uses: ministryofjustice/hmpps-github-shared-actions/.github/actions/build-test-and-deploy/cloud-platform-auth@c241b9febb7a4fc11e88d0e781cbdfcf8abd84a5 # v1.0.17
+        with:
+          api: https://${{ secrets.KUBE_CLUSTER }}
+          cert: ${{ secrets.KUBE_CERT }}
+          cluster: ${{ secrets.KUBE_CLUSTER }}
+          namespace: ${{ secrets.KUBE_NAMESPACE }}
+          token: ${{ secrets.KUBE_TOKEN }}
+
+      - name: Generate and upload synthetic data
+        env:
+          NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+        run: ./scripts/deploy-synthetic-data.sh
