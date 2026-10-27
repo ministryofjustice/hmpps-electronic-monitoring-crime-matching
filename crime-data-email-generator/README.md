@@ -123,6 +123,26 @@ Load the generated `caseload.csv`, `device_activations.csv`, and `positions.csv`
 
 The batch-with-100-valid-crimes-at-landmarks.csv batch can be sent to the dev mailbox and should produce crime matches that can be viewed in the UI.
 
+### Upload data to the dev mock Datastore
+
+From this directory, run:
+
+```bash
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh
+```
+
+This generates the synthetic data and uploads it to the S3 bucket used by the dev mock Datastore. The npm script sets `NODE_OPTIONS=--use-system-ca` automatically. Before deploying, ensure `kubectl` is authenticated for the dev namespace and that `kubectl`, `jq`, and `aws` are available.
+
+The script accepts the following options:
+
+```bash
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --dry-run
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-generate
+```
+
+* `--dry-run` Builds and generates the data without uploading it to S3.
+* `--skip-generate` skips the build and data generation, instead using existing CSV files in `output/`.
+
 ## Deterministic data
 
 The project uses a seeded Faker instance and prefers the British English locale to generate realistic looking (but fake) addresses, postcodes etc.
