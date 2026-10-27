@@ -5,8 +5,6 @@ name: Deploy synthetic data
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'crime-data-email-generator/**'
       - '!crime-data-email-generator/**.md'
