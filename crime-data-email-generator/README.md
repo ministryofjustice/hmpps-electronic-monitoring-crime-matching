@@ -128,7 +128,7 @@ The batch-with-100-valid-crimes-at-landmarks.csv batch can be sent to the dev ma
 From this directory, run:
 
 ```bash
-npm run deploy-synthetic-data
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh
 ```
 
 This generates the synthetic data and uploads it to the S3 bucket used by the dev mock Datastore. The npm script sets `NODE_OPTIONS=--use-system-ca` automatically. Before deploying, ensure `kubectl` is authenticated for the dev namespace and that `kubectl`, `jq`, and `aws` are available.
@@ -136,8 +136,8 @@ This generates the synthetic data and uploads it to the S3 bucket used by the de
 The script accepts the following options:
 
 ```bash
-npm run deploy-synthetic-data -- --dry-run
-npm run deploy-synthetic-data -- --skip-generate
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --dry-run
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-generate
 ```
 
 * `--dry-run` Builds and generates the data without uploading it to S3.
