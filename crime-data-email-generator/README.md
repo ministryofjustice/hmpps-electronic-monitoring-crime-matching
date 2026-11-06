@@ -145,7 +145,7 @@ NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-gene
 
 ## Mock datastore
 
-The mock datastore is [defined] in terraform (https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in Cloud Platform Environments.
+The mock datastore is [defined](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in terraform  in Cloud Platform Environments.
 
 The CSVs that are uploaded for each table MUST match the definition. If they don't one of two things will happen:
 - If a service (e.g. the algorithm) requests a column that is missing from the terraform definition, a `COLUMN_NOT_FOUND` will be generated.
