@@ -5,6 +5,10 @@ const createRandomDeviceWearer = (overrides: Partial<DeviceWearer> = {}): Device
   return {
     uniqueDeviceWearerId: faker.string.alphanumeric({ length: 12 }),
     firstName: faker.person.firstName(),
+    middleName:
+      faker.helpers.maybe(() => faker.person.middleName(), {
+        probability: 0.2,
+      }) || '',
     lastName: faker.person.lastName(),
     nomisId: faker.string.alphanumeric({ length: 8 }),
     mdssPersonId: faker.number.int(),
