@@ -3,6 +3,7 @@ import DeviceActivation from './deviceActivation'
 type DeviceWearer = {
   uniqueDeviceWearerId: string
   firstName: string
+  middleName: string
   lastName: string
   nomisId: string
   mdssPersonId: number
