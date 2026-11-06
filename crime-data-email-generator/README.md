@@ -143,6 +143,14 @@ NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-gene
 * `--dry-run` Builds and generates the data without uploading it to S3.
 * `--skip-generate` skips the build and data generation, instead using existing CSV files in `output/`.
 
+## Mock datastore
+
+The mock datastore is [defined] in terraform (https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in Cloud Platform Environments.
+
+The CSVs that are uploaded for each table MUST match the definition. If they don't one of two things will happen:
+- If a service (e.g. the algorithm) requests a column that is missing from the terraform definition, a `COLUMN_NOT_FOUND` will be generated.
+- If the column exists in the terraform definition, but is missing from the CSV files uploaded to S3, no results will be returned. The assumption is that because the file does not match the definition, Athena ignores it.
+
 ## Deterministic data
 
 The project uses a seeded Faker instance and prefers the British English locale to generate realistic looking (but fake) addresses, postcodes etc.
