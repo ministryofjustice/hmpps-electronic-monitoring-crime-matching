@@ -6,6 +6,7 @@ const columns = [
   'grouped_date',
   'unique_device_wearer_id',
   'first_name',
+  'middle_name',
   'last_name',
   'date_of_birth',
   'house_number_and_street_name',
@@ -62,6 +63,7 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
           '', // grouped_date
           deviceWearer.uniqueDeviceWearerId, // unique_device_wearer_id
           deviceWearer.firstName, // first_name
+          deviceWearer.middleName, // middle_name
           deviceWearer.lastName, // last_name
           toAthenaDate(deviceWearer.dateOfBirth), // date_of_birth
           deviceWearer.houseNumberAndStreetName, // house_number_and_street_name
