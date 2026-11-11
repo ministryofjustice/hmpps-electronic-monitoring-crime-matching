@@ -82,8 +82,8 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
           '', // responsible_organisation
           deviceWearer.responsibleOfficerName, // responsible_officer_name
           '', // is_monitored
-          '', // caseload__datetime_added
-          '', // position__datetime_added
+          toAthenaTimestamp(new Date(Date.now())), // caseload__datetime_added
+          toAthenaTimestamp(new Date(Date.now())), // position__datetime_added
           activation.device_activation_id, // device_activation_id
           toAthenaTimestamp(activation.device_activation_date), // device_activation_date
           toAthenaTimestamp(activation.device_deactivation_date), // device_deactivation_date
