@@ -1,9 +1,8 @@
 import { stringify } from 'csv-stringify/sync'
 import { ElectronicMonitoringData } from '../fixtures/electronic-monitoring/createElectronicMonitoringData'
-import { toAthenaDate } from './formatters'
+import { toAthenaDate, toAthenaTimestamp } from './formatters'
 
 const columns = [
-  'grouped_date',
   'unique_device_wearer_id',
   'first_name',
   'middle_name',
@@ -27,13 +26,13 @@ const columns = [
   'responsible_organisation',
   'responsible_officer_name',
   'is_monitored',
+  '__datetime_added'
 ]
 
 const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {
   return stringify([
     columns,
     ...data.deviceWearers.map(deviceWearer => [
-      '',
       deviceWearer.uniqueDeviceWearerId,
       deviceWearer.firstName,
       deviceWearer.middleName,
@@ -57,6 +56,7 @@ const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitorin
       deviceWearer.responsibleOfficerName,
       '',
       '',
+      toAthenaTimestamp(new Date(Date.now())) // __datetime_added
     ]),
   ])
 }

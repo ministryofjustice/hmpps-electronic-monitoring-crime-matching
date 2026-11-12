@@ -3,7 +3,6 @@ import { ElectronicMonitoringData } from '../fixtures/electronic-monitoring/crea
 import { toAthenaDate, toAthenaTimestamp } from './formatters'
 
 const columns = [
-  'grouped_date',
   'unique_device_wearer_id',
   'first_name',
   'last_name',
@@ -59,7 +58,6 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
     ...data.deviceWearers.flatMap(deviceWearer =>
       deviceWearer.deviceActivations.flatMap(activation =>
         activation.positions.map(position => [
-          '', // grouped_date
           deviceWearer.uniqueDeviceWearerId, // unique_device_wearer_id
           deviceWearer.firstName, // first_name
           deviceWearer.lastName, // last_name
@@ -82,8 +80,8 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
           '', // responsible_organisation
           deviceWearer.responsibleOfficerName, // responsible_officer_name
           '', // is_monitored
-          '', // caseload__datetime_added
-          '', // position__datetime_added
+          toAthenaTimestamp(new Date(Date.now())), // caseload__datetime_added
+          toAthenaTimestamp(new Date(Date.now())), // position__datetime_added
           activation.device_activation_id, // device_activation_id
           toAthenaTimestamp(activation.device_activation_date), // device_activation_date
           toAthenaTimestamp(activation.device_deactivation_date), // device_deactivation_date
