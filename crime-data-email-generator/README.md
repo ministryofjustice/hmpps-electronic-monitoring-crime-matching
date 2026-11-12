@@ -131,7 +131,7 @@ From this directory, run:
 NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh
 ```
 
-This generates the synthetic data and uploads it to the S3 bucket used by the dev mock Datastore. The npm script sets `NODE_OPTIONS=--use-system-ca` automatically. Before deploying, ensure `kubectl` is authenticated for the dev namespace and that `kubectl`, `jq`, and `aws` are available.
+This generates the synthetic data and uploads it to the S3 bucket used by the dev mock Datastore. The npm script sets `NODE_OPTIONS=--use-system-ca` automatically. Before deploying, [ensure `kubectl` is authenticated for the dev namespace](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) and that `kubectl`, `jq`, and `aws` are available.
 
 The script accepts the following options:
 
