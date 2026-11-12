@@ -3,7 +3,6 @@ import { ElectronicMonitoringData } from '../fixtures/electronic-monitoring/crea
 import { toAthenaDate, toAthenaTimestamp } from './formatters'
 
 const columns = [
-  'grouped_date',
   'unique_device_wearer_id',
   'first_name',
   'middle_name',
@@ -34,7 +33,6 @@ const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitorin
   return stringify([
     columns,
     ...data.deviceWearers.map(deviceWearer => [
-      '',
       deviceWearer.uniqueDeviceWearerId,
       deviceWearer.firstName,
       deviceWearer.middleName,
