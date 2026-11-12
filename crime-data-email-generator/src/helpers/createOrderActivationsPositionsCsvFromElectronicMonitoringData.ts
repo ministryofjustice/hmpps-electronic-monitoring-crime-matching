@@ -5,6 +5,7 @@ import { toAthenaDate, toAthenaTimestamp } from './formatters'
 const columns = [
   'unique_device_wearer_id',
   'first_name',
+  'middle_name',
   'last_name',
   'date_of_birth',
   'house_number_and_street_name',
@@ -60,6 +61,7 @@ const createOrderActivationsPositionsCsvFromElectronicMonitoringData = (data: El
         activation.positions.map(position => [
           deviceWearer.uniqueDeviceWearerId, // unique_device_wearer_id
           deviceWearer.firstName, // first_name
+          deviceWearer.middleName, // middle_name
           deviceWearer.lastName, // last_name
           toAthenaDate(deviceWearer.dateOfBirth), // date_of_birth
           deviceWearer.houseNumberAndStreetName, // house_number_and_street_name
