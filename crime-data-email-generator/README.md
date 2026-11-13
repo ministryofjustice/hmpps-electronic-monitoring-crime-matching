@@ -112,13 +112,6 @@ This generates a crime batch with related electronic monitoring data for edge ca
 
 It creates a crime batch of one crime and one device wearer match, with positions simulating a sequence count that exceeds the alphabet limit.
 
-Use `output/batch-with-crime-with-matches.csv` with this dataset. This single-crime
-fixture also matches the standard synthetic dataset: its location and UTC time
-window align with the seeded Manchester Piccadilly crime `XnhRdX0Y2Tw`
-(31 March 2024 19:24:39 to 1 April 2024 04:21:48 UTC). If the seeded landmark
-dataset changes, recheck this alignment.
-
-Both generators overwrite the same electronic monitoring CSVs in `output/`.
 
 ## Using the synthetic data
 
