@@ -9,6 +9,8 @@
     "create-synthetic-edge-case-data": "NODE_OPTIONS=--use-system-ca node dist/createSyntheticEdgeCaseData.js",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
+    "validate-schema": "node scripts/validate-athena-schema.mjs",
+    "test:schema": "node --test scripts/validate-athena-schema.test.mjs",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "author": "",
@@ -16,6 +18,8 @@
   "description": "",
   "dependencies": {
     "@faker-js/faker": "^10.3.0",
+    "csv-parse": "7.0.3",
+    "hcl2-parser": "1.0.3",
     "csv-stringify": "6.8.3"
   },
   "devDependencies": {

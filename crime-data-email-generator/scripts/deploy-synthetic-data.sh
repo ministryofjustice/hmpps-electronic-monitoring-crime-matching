@@ -8,7 +8,7 @@
 #
 # Usage: ./scripts/deploy-synthetic-data.sh [--dry-run] [--skip-generate] [--use-aws-credentials]
 #
-# Requires: npm for generation; aws for uploads.
+# Requires: npm and installed dependencies for validation; aws for uploads.
 # Default authentication also requires authenticated kubectl and jq.
 # --use-aws-credentials uses the AWS CLI's existing credential configuration.
 #
@@ -76,6 +76,10 @@ for upload in "${UPLOADS[@]}"; do
   file="./output/${upload%%:*}"
   [[ -s "$file" ]] || { echo "Missing or empty output file: $file" >&2; exit 1; }
 done
+
+require npm
+log "Validating generated CSVs against Athena Terraform"
+npm run --silent validate-schema
 
 if [[ "$DRY_RUN" == true ]]; then
   log "Dry run - the following files would be uploaded:"

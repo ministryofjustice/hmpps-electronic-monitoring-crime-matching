@@ -45,7 +45,10 @@ jobs:
       - name: Install dependencies
         run: npm run setup
 
-      - name: Generate and check deployment files
+      - name: Test schema validator
+        run: npm run test:schema
+
+      - name: Generate and validate files against Cloud Platform main
         run: bash ./scripts/deploy-synthetic-data.sh --dry-run
 
       - name: Check matching crime batch
