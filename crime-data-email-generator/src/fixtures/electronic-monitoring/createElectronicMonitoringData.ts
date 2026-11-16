@@ -90,6 +90,7 @@ const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> =
   console.log(deviceWearer.firstName)
 
   for (let i = 0; i < faker.number.int({ min: 1, max: 3 }); i += 1) {
+    // eslint-disable-next-line no-await-in-loop
     deviceActivations.push(await createDeviceActivation(deviceWearer.mdssPersonId, crimes))
   }
 
@@ -106,6 +107,7 @@ const createElectronicMonitoringData = async (
   const deviceWearers: Array<DeviceWearer> = []
 
   for (let i = 0; i < deviceWearerCount; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
     deviceWearers.push(await createDeviceWearer(crimes))
   }
 
