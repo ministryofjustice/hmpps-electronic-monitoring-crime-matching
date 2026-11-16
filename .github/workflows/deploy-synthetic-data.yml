@@ -21,7 +21,7 @@ jobs:
 #    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment: dev
+#    environment: dev
 
     permissions:
       contents: read
@@ -64,14 +64,14 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.MOCK_DATA_ROLE_ARN }}
-          aws-region: eu-west-2
-          role-session-name: synthetic-data-${{ github.run_id }}
-          role-duration-seconds: 900
-          unset-current-credentials: true
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          role-to-assume: ${{ vars.MOCK_DATA_ROLE_ARN }}
+#          aws-region: eu-west-2
+#          role-session-name: synthetic-data-${{ github.run_id }}
+#          role-duration-seconds: 900
+#          unset-current-credentials: true
 
 #      - name: Upload synthetic data
 #        env:
