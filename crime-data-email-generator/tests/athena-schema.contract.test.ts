@@ -3,7 +3,10 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { test, type TestContext } from 'node:test'
-import validateAthenaSchema from './validate-athena-schema.ts'
+import validateAthenaSchema from './athena-schema.ts'
+
+const terraformUrl =
+  'https://raw.githubusercontent.com/ministryofjustice/cloud-platform-environments/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf'
 
 const tables = ['position', 'device_activations', 'caseload', 'orders_activations_positions']
 const files = ['positions.csv', 'device_activations.csv', 'caseload.csv', 'orders_activations_positions.csv']
@@ -32,6 +35,14 @@ async function fixture(t: TestContext): Promise<string> {
   await Promise.all(files.map(file => writeFile(join(directory, file), 'id,description\n1,example\n')))
   return directory
 }
+
+test('generated synthetic CSVs match the Athena schema contract', async () => {
+  const response = await fetch(terraformUrl, { signal: AbortSignal.timeout(30_000) })
+  if (!response.ok) {
+    throw new Error(`Cannot fetch Athena Terraform: HTTP ${response.status}`)
+  }
+  await validateAthenaSchema(await response.text(), 'output')
+})
 
 test('accepts all four files with matching ordered headers and row widths', async t => {
   await validateAthenaSchema(terraform, await fixture(t))

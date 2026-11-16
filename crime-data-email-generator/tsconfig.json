@@ -24,6 +24,7 @@
     "integration_tests",
     "dist",
     "scripts/**/*.ts",
+    "tests/**/*.ts",
     "cypress.config.ts",
     "esbuild",
     "eslint.config.mjs"

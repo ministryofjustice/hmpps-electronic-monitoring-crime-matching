@@ -3,7 +3,7 @@ import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 export default [
   ...hmppsConfig(),
   {
-    files: ['scripts/*.ts'],
+    files: ['scripts/*.ts', 'tests/*.ts'],
     languageOptions: {
       ecmaVersion: 2022,
       parserOptions: { ecmaVersion: 2022 },

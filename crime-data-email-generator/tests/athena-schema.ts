@@ -1,11 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { pathToFileURL } from 'node:url'
 import hcl from 'hcl2-parser'
 import { parse } from 'csv-parse/sync'
-
-const terraformUrl =
-  'https://raw.githubusercontent.com/ministryofjustice/cloud-platform-environments/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf'
 
 const files = {
   position: 'positions.csv',
@@ -76,30 +72,5 @@ export default async function validateAthenaSchema(terraform: string, outputDire
         throw new Error(`${filename}: record ${index + 2} has ${record.length} fields; expected ${expected.length}`)
       }
     }
-    console.log(`${filename}: validated ${expected.length} columns and ${records.length} data rows`)
   }
-}
-
-async function main() {
-  const localFile = process.env.ATHENA_TERRAFORM_FILE
-  let terraform: string
-  if (localFile) {
-    console.log(`Validating against Terraform file: ${localFile}`)
-    terraform = await readFile(localFile, 'utf8')
-  } else {
-    console.log(`Validating against Cloud Platform main: ${terraformUrl}`)
-    const response = await fetch(terraformUrl, { signal: AbortSignal.timeout(30_000) })
-    if (!response.ok) {
-      throw new Error(`Cannot fetch Athena Terraform: HTTP ${response.status}`)
-    }
-    terraform = await response.text()
-  }
-  await validateAthenaSchema(terraform, 'output')
-}
-
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch(error => {
-    console.error(`Athena schema validation failed: ${error instanceof Error ? error.message : String(error)}`)
-    process.exitCode = 1
-  })
 }
