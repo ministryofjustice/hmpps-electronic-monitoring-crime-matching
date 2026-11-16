@@ -1,0 +1,83 @@
+name: Deploy synthetic data
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'crime-data-email-generator/**'
+      - '.github/workflows/deploy-synthetic-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synthetic-data-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+#    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: dev
+
+    permissions:
+      contents: read
+      id-token: write
+
+    defaults:
+      run:
+        working-directory: crime-data-email-generator
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Generate and check deployment files
+        run: bash ./scripts/deploy-synthetic-data.sh --dry-run
+
+      - name: Check matching crime batch
+        run: test -s output/batch-with-100-valid-crimes-at-landmarks.csv
+
+      - name: Retain generated dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-data-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            crime-data-email-generator/output/batch-with-100-valid-crimes-at-landmarks.csv
+            crime-data-email-generator/output/positions.csv
+            crime-data-email-generator/output/device_activations.csv
+            crime-data-email-generator/output/caseload.csv
+            crime-data-email-generator/output/orders_activations_positions.csv
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.MOCK_DATA_ROLE_ARN }}
+          aws-region: eu-west-2
+          role-session-name: synthetic-data-${{ github.run_id }}
+          role-duration-seconds: 900
+          unset-current-credentials: true
+
+      - name: Upload synthetic data
+        env:
+          BUCKET: ${{ vars.MOCK_DATA_BUCKET }}
+        run: |
+          : "${BUCKET:?MOCK_DATA_BUCKET must be configured}"
+          bash ./scripts/deploy-synthetic-data.sh \
+            --skip-generate \
+            --use-aws-credentials
