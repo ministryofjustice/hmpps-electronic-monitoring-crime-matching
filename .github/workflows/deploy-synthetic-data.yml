@@ -2,8 +2,8 @@ name: Deploy synthetic data
 
 on:
   push:
-    branches:
-      - main
+#    branches:
+#      - main
     paths:
       - 'crime-data-email-generator/**'
       - '.github/workflows/deploy-synthetic-data.yml'
