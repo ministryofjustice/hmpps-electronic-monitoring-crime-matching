@@ -2,8 +2,8 @@ name: Deploy synthetic data
 
 on:
   push:
-#    branches:
-#      - main
+    branches:
+      - main
     paths:
       - 'crime-data-email-generator/**'
       - '.github/workflows/deploy-synthetic-data.yml'
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   deploy:
-#    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: dev
@@ -65,7 +65,7 @@ jobs:
             crime-data-email-generator/output/caseload.csv
             crime-data-email-generator/output/orders_activations_positions.csv
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 7
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

@@ -97,7 +97,7 @@ if [[ "$USE_AWS_CREDENTIALS" == true ]]; then
 else
   require kubectl jq
 
-  log "Looking up mock datastore role in namespace ${NAMESPACE}"
+  log "Looking up mock datastore role"
   ROLE_ARN=$(kubectl -n "$NAMESPACE" get secret "$ROLE_SECRET" -o json | jq -r '.data.general_role_arn // empty' | base64 --decode)
   [[ -n "$ROLE_ARN" ]] || { echo "Could not read general_role_arn from secret ${ROLE_SECRET}" >&2; exit 1; }
 
@@ -106,7 +106,7 @@ else
 
   SESSION_NAME=$(printf 'synthetic-data-%s-%s' "${GITHUB_ACTOR:-${USER:-unknown}}" "$(date +%s)" | tr -c 'A-Za-z0-9+=,.@_-' '-' | cut -c1-64)
 
-  log "Assuming role via service pod ${POD}"
+  log "Assuming role via service pod"
   CREDENTIALS=$(kubectl -n "$NAMESPACE" exec "$POD" -- \
     aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$SESSION_NAME" --output json)
 

@@ -139,12 +139,47 @@ The script accepts the following options:
 ```bash
 NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --dry-run
 NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-generate
+NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --use-aws-credentials
 ```
 
 * `--dry-run` Builds and generates the data without uploading it to S3.
 * `--skip-generate` skips the build and data generation, instead using existing CSV files in `output/`.
+* `--use-aws-credentials` uses the AWS CLI's existing credentials instead of authenticating through Kubernetes.
 
-## Mock datastore
+### Terraform schema validation
+
+Before any upload, the deployment script validates all four
+electronic monitoring CSVs against `athena.tf` fetched from Cloud Platform Environments' **main**
+branch. Dry runs perform the same validation. Fetch or parsing failures stop the deployment.
+
+The check requires exact column names and order, at least one data row in each file, and the
+expected number of fields in every row. Athena reads these columns by position, not header name.
+
+To validate existing output without generating or uploading:
+
+```bash
+npm run validate-schema
+```
+
+By default this requires network access to GitHub. To validate against a local Terraform checkout instead:
+
+```bash
+ATHENA_TERRAFORM_FILE=/path/to/cloud-platform-environments/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf \
+  npm run validate-schema
+```
+
+The same environment variable works with the deployment script. For schema changes, merge the
+Terraform update first, then update the generated columns here. Run the validator's tests with
+`npm run test:schema`.
+
+### Automatic deployment
+
+The **Deploy synthetic data** GitHub Actions workflow generates and uploads the four electronic monitoring CSVs when changes under `crime-data-email-generator/` or to the workflow are merged into `main`.
+
+All five generated CSVs are retained as a workflow artifact for 7 days, identified by commit SHA and workflow run. The artifact is saved before upload so it remains available if deployment fails. 
+Download the matching crime batch from that artifact for ingestion; the workflow does not ingest it automatically.
+
+## Mock datastoreå
 
 The mock datastore is [defined](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in terraform in Cloud Platform Environments.
 
