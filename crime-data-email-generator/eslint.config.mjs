@@ -3,11 +3,15 @@ import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 export default [
   ...hmppsConfig(),
   {
-    files: ['scripts/*.mjs'],
+    files: ['scripts/*.ts'],
     languageOptions: {
       ecmaVersion: 2022,
       parserOptions: { ecmaVersion: 2022 },
     },
-    rules: { 'no-console': 'off' },
+    rules: {
+      'import/extensions': 'off',
+      'import/no-extraneous-dependencies': ['error', { packageDir: [process.cwd()] }],
+      'no-console': 'off',
+    },
   },
 ]

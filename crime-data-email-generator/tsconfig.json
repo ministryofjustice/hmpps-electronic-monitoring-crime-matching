@@ -23,6 +23,7 @@
     "assets/**/*.ts",
     "integration_tests",
     "dist",
+    "scripts/**/*.ts",
     "cypress.config.ts",
     "esbuild",
     "eslint.config.mjs"

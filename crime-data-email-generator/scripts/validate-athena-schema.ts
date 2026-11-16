@@ -14,8 +14,17 @@ const files = {
   orders_activations_positions: 'orders_activations_positions.csv',
 }
 
-export default async function validateAthenaSchema(terraform, outputDirectory) {
-  const [definition, error] = hcl.parseToObject(terraform)
+type TerraformColumn = { name?: unknown }
+type TerraformTable = {
+  name?: string
+  storage_descriptor?: Array<{ columns?: TerraformColumn[] }>
+}
+type TerraformDefinition = {
+  resource?: { aws_glue_catalog_table?: Record<string, TerraformTable[]> }
+}
+
+export default async function validateAthenaSchema(terraform: string, outputDirectory: string): Promise<void> {
+  const [definition, error] = hcl.parseToObject(terraform) as [TerraformDefinition | null, unknown]
   if (!definition || error) {
     throw new Error('Cannot parse Athena Terraform; validation requires valid HCL')
   }
@@ -36,10 +45,15 @@ export default async function validateAthenaSchema(terraform, outputDirectory) {
 
     const descriptors = matches[0].storage_descriptor
     const columns = descriptors?.[0]?.columns
-    if (descriptors?.length !== 1 || !columns?.length || columns.some(column => typeof column.name !== 'string')) {
+    if (descriptors?.length !== 1 || !columns?.length) {
       throw new Error(`${filename}: expected explicit Terraform storage_descriptor columns`)
     }
-    const expected = columns.map(column => column.name)
+    const expected = columns.map(column => {
+      if (typeof column.name !== 'string') {
+        throw new Error(`${filename}: expected explicit Terraform storage_descriptor columns`)
+      }
+      return column.name
+    })
     if (new Set(expected).size !== expected.length) {
       throw new Error(`${filename}: duplicate Terraform column names`)
     }
@@ -68,7 +82,7 @@ export default async function validateAthenaSchema(terraform, outputDirectory) {
 
 async function main() {
   const localFile = process.env.ATHENA_TERRAFORM_FILE
-  let terraform
+  let terraform: string
   if (localFile) {
     console.log(`Validating against Terraform file: ${localFile}`)
     terraform = await readFile(localFile, 'utf8')
@@ -85,7 +99,7 @@ async function main() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(error => {
-    console.error(`Athena schema validation failed: ${error.message}`)
+    console.error(`Athena schema validation failed: ${error instanceof Error ? error.message : String(error)}`)
     process.exitCode = 1
   })
 }

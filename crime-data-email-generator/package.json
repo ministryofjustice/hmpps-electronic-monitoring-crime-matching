@@ -9,8 +9,8 @@
     "create-synthetic-edge-case-data": "NODE_OPTIONS=--use-system-ca node dist/createSyntheticEdgeCaseData.js",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
-    "validate-schema": "node scripts/validate-athena-schema.mjs",
-    "test:schema": "node --test scripts/validate-athena-schema.test.mjs",
+    "validate-schema": "node scripts/validate-athena-schema.ts",
+    "test:schema": "tsc --project scripts/tsconfig.json && node --test scripts/validate-athena-schema.test.ts",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "author": "",

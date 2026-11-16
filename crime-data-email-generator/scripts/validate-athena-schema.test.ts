@@ -2,8 +2,8 @@ import assert from 'node:assert/strict'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { test } from 'node:test'
-import validateAthenaSchema from './validate-athena-schema.mjs'
+import { test, type TestContext } from 'node:test'
+import validateAthenaSchema from './validate-athena-schema.ts'
 
 const tables = ['position', 'device_activations', 'caseload', 'orders_activations_positions']
 const files = ['positions.csv', 'device_activations.csv', 'caseload.csv', 'orders_activations_positions.csv']
@@ -26,7 +26,7 @@ resource "aws_glue_catalog_table" "${name}" {
   )
   .join('\n')
 
-async function fixture(t) {
+async function fixture(t: TestContext): Promise<string> {
   const directory = await mkdtemp(join(tmpdir(), 'athena-schema-'))
   t.after(() => rm(directory, { recursive: true, force: true }))
   await Promise.all(files.map(file => writeFile(join(directory, file), 'id,description\n1,example\n')))
