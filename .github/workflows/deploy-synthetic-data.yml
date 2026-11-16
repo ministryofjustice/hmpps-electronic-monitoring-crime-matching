@@ -76,11 +76,11 @@ jobs:
           role-duration-seconds: 900
           unset-current-credentials: true
 
-#      - name: Upload synthetic data
-#        env:
-#          BUCKET: ${{ vars.MOCK_DATA_BUCKET }}
-#        run: |
-#          : "${BUCKET:?MOCK_DATA_BUCKET must be configured}"
-#          bash ./scripts/deploy-synthetic-data.sh \
-#            --skip-generate \
-#            --use-aws-credentials
+      - name: Upload synthetic data
+        env:
+          BUCKET: ${{ vars.MOCK_DATA_BUCKET }}
+        run: |
+          : "${BUCKET:?MOCK_DATA_BUCKET must be configured}"
+          bash ./scripts/deploy-synthetic-data.sh \
+            --skip-generate \
+            --use-aws-credentials
