@@ -179,7 +179,7 @@ The **Deploy synthetic data** GitHub Actions workflow generates and uploads the 
 All five generated CSVs are retained as a workflow artifact for 7 days, identified by commit SHA and workflow run. The artifact is saved before upload so it remains available if deployment fails. 
 Download the matching crime batch from that artifact for ingestion; the workflow does not ingest it automatically.
 
-## Mock datastoreå
+## Mock datastore
 
 The mock datastore is [defined](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in terraform in Cloud Platform Environments.
 
