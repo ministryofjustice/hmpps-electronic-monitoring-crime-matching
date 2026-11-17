@@ -12,7 +12,7 @@ const columns = [
   'device_id',
   'device_serial_number',
   'device_model_name',
-  '__datetime_added'
+  '__datetime_added',
 ]
 
 const createDeviceActivationsCsvFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {

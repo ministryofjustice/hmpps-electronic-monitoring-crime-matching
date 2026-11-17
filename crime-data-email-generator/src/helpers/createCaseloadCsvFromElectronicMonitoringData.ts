@@ -26,7 +26,7 @@ const columns = [
   'responsible_organisation',
   'responsible_officer_name',
   'is_monitored',
-  '__datetime_added'
+  '__datetime_added',
 ]
 
 const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {
@@ -56,7 +56,7 @@ const createCaseloadCsvFromElectronicMonitoringData = (data: ElectronicMonitorin
       deviceWearer.responsibleOfficerName,
       '',
       '',
-      toAthenaTimestamp(new Date(Date.now())) // __datetime_added
+      toAthenaTimestamp(new Date(Date.now())), // __datetime_added
     ]),
   ])
 }
