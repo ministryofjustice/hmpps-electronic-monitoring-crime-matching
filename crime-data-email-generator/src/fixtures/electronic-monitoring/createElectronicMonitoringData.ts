@@ -30,6 +30,8 @@ const createDeviceActivationIncludingMatchedCrime = async (personId: number, cri
     }),
   })
 
+  // eslint-disable-next-line no-console
+  console.log(`\tCrime ref: ${crime.crimeReference}, device id: ${activation.device_id}`)
   const positions = await createTrailPassingThroughCrimeLocation(activation.device_id, personId, crime)
 
   return {
@@ -84,16 +86,21 @@ const createDeviceActivation = async (personId: number, crimes: Array<Crime>) =>
 
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
-  const deviceActivations: Array<DeviceActivation> = []
+  // eslint-disable-next-line no-console
+  console.log(deviceWearer.firstName)
 
-  for (let i = 0; i < faker.number.int({ min: 1, max: 3 }); i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    deviceActivations.push(await createDeviceActivation(deviceWearer.mdssPersonId, crimes))
+  const createActivations = async (index: number): Promise<Array<DeviceActivation>> => {
+    if (index >= faker.number.int({ min: 1, max: 3 })) {
+      return []
+    }
+
+    const activation = await createDeviceActivation(deviceWearer.mdssPersonId, crimes)
+    return [activation, ...(await createActivations(index + 1))]
   }
 
   return {
     ...deviceWearer,
-    deviceActivations,
+    deviceActivations: await createActivations(0),
   }
 }
 
@@ -101,12 +108,16 @@ const createElectronicMonitoringData = async (
   deviceWearerCount: number,
   crimes: Array<Crime>,
 ): Promise<ElectronicMonitoringData> => {
-  const deviceWearers: Array<DeviceWearer> = []
-
-  for (let i = 0; i < deviceWearerCount; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    deviceWearers.push(await createDeviceWearer(crimes))
-  }
+  const deviceWearers = await Array.from({ length: deviceWearerCount }).reduce<Promise<Array<DeviceWearer>>>(
+    wearersPromise =>
+      wearersPromise.then(wearers =>
+        createDeviceWearer(crimes).then(wearer => {
+          wearers.push(wearer)
+          return wearers
+        }),
+      ),
+    Promise.resolve([]),
+  )
 
   return { deviceWearers }
 }

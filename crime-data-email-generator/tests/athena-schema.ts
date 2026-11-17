@@ -1,14 +1,14 @@
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import hcl from 'hcl2-parser'
 import { parse } from 'csv-parse/sync'
 
 const files = {
-  position: 'positions.csv',
-  device_activations: 'device_activations.csv',
-  caseload: 'caseload.csv',
-  orders_activations_positions: 'orders_activations_positions.csv',
+  position: 'position/position.csv',
+  device_activations: 'device_activations/device_activations.csv',
+  caseload: 'caseload/caseload.csv',
+  orders_activations_positions: 'orders_activations_positions/orders_activations_positions.csv',
 }
+type TableName = keyof typeof files
+type CsvContents = Partial<Record<TableName, string>>
 
 type TerraformColumn = { name?: unknown }
 type TerraformTable = {
@@ -19,21 +19,19 @@ type TerraformDefinition = {
   resource?: { aws_glue_catalog_table?: Record<string, TerraformTable[]> }
 }
 
-export default async function validateAthenaSchema(terraform: string, outputDirectory: string): Promise<void> {
+export default function validateAthenaSchema(terraform: string, csvContents: CsvContents): void {
   const [definition, error] = hcl.parseToObject(terraform) as [TerraformDefinition | null, unknown]
   if (!definition || error) {
     throw new Error('Cannot parse Athena Terraform; validation requires valid HCL')
   }
 
   const tables = Object.values(definition.resource?.aws_glue_catalog_table ?? {}).flat()
-  const inputs = await Promise.all(
-    Object.entries(files).map(async ([tableName, filename]) => ({
-      tableName,
-      filename,
-      content: await readFile(join(outputDirectory, filename), 'utf8'),
-    })),
-  )
-  for (const { tableName, filename, content } of inputs) {
+  for (const [tableName, filename] of Object.entries(files) as Array<[TableName, string]>) {
+    const content = csvContents[tableName]
+    if (content === undefined) {
+      throw new Error(`${filename}: missing CSV content`)
+    }
+
     const matches = tables.filter(table => table.name === tableName)
     if (matches.length !== 1) {
       throw new Error(`${filename}: expected exactly one Terraform table named ${tableName}`)

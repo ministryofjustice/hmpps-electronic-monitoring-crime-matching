@@ -28,16 +28,22 @@ const createSyntheticData = async () => {
   const emData = await createElectronicMonitoringData(100, batch.crimes)
 
   // Write positions csv to disk
-  createFile('positions.csv', createDevicePositionsCsvFromElectronicMonitoringData(emData))
+  createFile('s3/position/position.csv', createDevicePositionsCsvFromElectronicMonitoringData(emData))
 
   // Write device activations csv to disk
-  createFile('device_activations.csv', createDeviceActivationsCsvFromElectronicMonitoringData(emData))
+  createFile(
+    's3/device_activations/device_activations.csv',
+    createDeviceActivationsCsvFromElectronicMonitoringData(emData),
+  )
 
   // Write caseload csv to disk
-  createFile('caseload.csv', createCaseloadCsvFromElectronicMonitoringData(emData))
+  createFile('s3/caseload/caseload.csv', createCaseloadCsvFromElectronicMonitoringData(emData))
 
   // Write orders activations positions csv to disk
-  createFile('orders_activations_positions.csv', createOrderActivationsPositionsCsvFromElectronicMonitoringData(emData))
+  createFile(
+    's3/orders_activations_positions/orders_activations_positions.csv',
+    createOrderActivationsPositionsCsvFromElectronicMonitoringData(emData),
+  )
 }
 
 createSyntheticData()

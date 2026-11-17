@@ -2,6 +2,7 @@ import { configureAllowedScripts } from '@ministryofjustice/hmpps-npm-script-all
 
 export default configureAllowedScripts({
   allowlist: {
-    'node_modules/unrs-resolver@1.11.1': 'ALLOW',
+    // Needed by esbuild for watching files during development
+    'node_modules/@parcel/watcher@2.6.0': 'ALLOW',
   },
 })

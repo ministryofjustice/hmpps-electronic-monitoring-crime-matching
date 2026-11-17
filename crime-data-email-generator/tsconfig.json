@@ -3,7 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "sourceMap": true,
     "declaration": true,
     "noEmit": false,
@@ -15,7 +15,8 @@
     "typeRoots": ["./node_modules/@types"],
     "strict": true,
     "types": [
-      "node"
+      "node",
+      "jest"
     ]
   },
   "exclude": [
@@ -23,8 +24,6 @@
     "assets/**/*.ts",
     "integration_tests",
     "dist",
-    "scripts/**/*.ts",
-    "tests/**/*.ts",
     "cypress.config.ts",
     "esbuild",
     "eslint.config.mjs"

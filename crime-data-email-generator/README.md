@@ -86,11 +86,13 @@ This generates a crime batch together with related electronic monitoring data.
 The output includes:
 
 ```text
-batch-with-100-valid-crimes-at-landmarks.csv
-positions.csv
-device_activations.csv
-caseload.csv
-orders_activations_positions.csv
+output/
+  batch-with-100-valid-crimes-at-landmarks.csv
+  s3/
+    position/position.csv
+    device_activations/device_activations.csv
+    caseload/caseload.csv
+    orders_activations_positions/orders_activations_positions.csv
 ```
 
 The crime batch contains 100 crimes placed at a small set of known landmarks.
@@ -120,7 +122,7 @@ The generated electronic monitoring CSVs can be uploaded to either:
 * the Datastore test environment; or
 * the mock Datastore deployed to Cloud Platform for end-to-end testing.
 
-Load the generated `caseload.csv`, `device_activations.csv`, and `positions.csv` into the corresponding datasets, then ingest the generated crime batch.
+Load the generated CSVs from `output/s3/` into the corresponding datasets, then ingest the generated crime batch.
 
 The batch-with-100-valid-crimes-at-landmarks.csv batch can be sent to the dev mailbox and should produce crime matches that can be viewed in the UI.
 
