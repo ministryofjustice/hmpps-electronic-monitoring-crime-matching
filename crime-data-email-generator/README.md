@@ -39,6 +39,8 @@ The top-level `helpers/` directory contains functions that turn fixture data int
 
 `createDevicePositionsCsvFromElectronicMonitoringData.ts` produces Datastore-compatible device position data.
 
+`createCrimeMatchesCsvFromElectronicMonitoringData.ts` produces a reference CSV for matched activations.
+
 `formatters.ts` contains date and timestamp formatting used by the generated Datastore data.
 
 `fs.ts` contains the functions used to write generated data into the `output/` directory.
@@ -86,11 +88,14 @@ This generates a crime batch together with related electronic monitoring data.
 The output includes:
 
 ```text
-batch-with-100-valid-crimes-at-landmarks.csv
-positions.csv
-device_activations.csv
-caseload.csv
-orders_activations_positions.csv
+output/
+  batch-with-100-valid-crimes-at-landmarks.csv
+  crime_matches.csv
+  s3/
+    position/position.csv
+    device_activations/device_activations.csv
+    caseload/caseload.csv
+    orders_activations_positions/orders_activations_positions.csv
 ```
 
 The crime batch contains 100 crimes placed at a small set of known landmarks.
@@ -98,6 +103,8 @@ The crime batch contains 100 crimes placed at a small set of known landmarks.
 The generator also creates 100 device wearers. Each wearer has between one and three device activations. Some activations are generated with position trails passing through the location of one of the generated crimes.
 
 When an activation is selected to match a crime, its activation and deactivation dates are generated so that the activation covers the crime period.
+
+`output/crime_matches.csv` records the matched activations, including the crime reference, device ID and wearer first name.
 
 Because crimes are generated from a relatively small collection of landmark locations, multiple device wearers may match the same crime. The generated dataset is intended for functional and end-to-end testing rather than production-like statistical distribution.
 
@@ -112,7 +119,6 @@ This generates a crime batch with related electronic monitoring data for edge ca
 
 It creates a crime batch of one crime and one device wearer match, with positions simulating a sequence count that exceeds the alphabet limit.
 
-
 ## Using the synthetic data
 
 The generated electronic monitoring CSVs can be uploaded to either:
@@ -120,31 +126,11 @@ The generated electronic monitoring CSVs can be uploaded to either:
 * the Datastore test environment; or
 * the mock Datastore deployed to Cloud Platform for end-to-end testing.
 
-Load the generated `caseload.csv`, `device_activations.csv`, and `positions.csv` into the corresponding datasets, then ingest the generated crime batch.
+Load the generated CSVs from `output/s3/` into the corresponding datasets, then ingest the generated crime batch.
 
 The batch-with-100-valid-crimes-at-landmarks.csv batch can be sent to the dev mailbox and should produce crime matches that can be viewed in the UI.
 
-### Upload data to the dev mock Datastore
-
-From this directory, run:
-
-```bash
-NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh
-```
-
-This generates the synthetic data and uploads it to the S3 bucket used by the dev mock Datastore. The npm script sets `NODE_OPTIONS=--use-system-ca` automatically. Before deploying, [ensure `kubectl` is authenticated for the dev namespace](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) and that `kubectl`, `jq`, and `aws` are available.
-
-The script accepts the following options:
-
-```bash
-NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --dry-run
-NODE_OPTIONS=--use-system-ca bash ./scripts/deploy-synthetic-data.sh --skip-generate
-```
-
-* `--dry-run` Builds and generates the data without uploading it to S3.
-* `--skip-generate` skips the build and data generation, instead using existing CSV files in `output/`.
-
-## Mock datastore
+## Mock datastore
 
 The mock datastore is [defined](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-electronic-monitoring-crime-matching-dev/resources/athena.tf) in terraform in Cloud Platform Environments.
 

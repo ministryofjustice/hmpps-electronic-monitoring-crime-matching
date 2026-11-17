@@ -92,11 +92,12 @@ const createElectronicMonitoringEdgeCaseData = (crime: WGS84Crime): ElectronicMo
         deviceActivations: [
           {
             ...activation,
+            matchedCrimeReference: crime.crimeReference,
             positions: createEdgeCasePositions(crime, activation.device_id, deviceWearer.mdssPersonId),
           },
         ],
       },
-    ]
+    ],
   }
 }
 

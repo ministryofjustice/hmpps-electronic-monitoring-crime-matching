@@ -1,0 +1,119 @@
+name: Deploy synthetic data
+
+on:
+  push:
+    paths:
+      - 'crime-data-email-generator/**'
+      - '.github/workflows/deploy-synthetic-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synthetic-data-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: crime-data-email-generator
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Build and typecheck
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: crime-data-email-generator
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Run schema contract tests
+        run: npm run test
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: dev
+
+    permissions:
+      contents: read
+      id-token: write
+
+    defaults:
+      run:
+        working-directory: crime-data-email-generator
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: crime-data-email-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: crime-data-email-generator/package-lock.json
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Build generator
+        run: npm run build
+
+      - name: Generate synthetic data
+        run: npm run create-synthetic-data
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.MOCK_DATA_ROLE_ARN }}
+          aws-region: eu-west-2
+          role-session-name: synthetic-data-${{ github.run_id }}
+          role-duration-seconds: 900
+          unset-current-credentials: true
+
+      - name: Sync data to S3
+        env:
+          BUCKET: ${{ vars.MOCK_DATA_BUCKET }}
+        run: bash ./scripts/sync-synthetic-data-to-s3.sh

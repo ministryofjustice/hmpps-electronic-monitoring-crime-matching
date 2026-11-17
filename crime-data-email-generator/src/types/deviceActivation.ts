@@ -8,6 +8,7 @@ type DeviceActivation = {
   device_deactivation_date: Date
   personId: number
   positions: Array<DevicePosition>
+  matchedCrimeReference?: string
 }
 
 export default DeviceActivation

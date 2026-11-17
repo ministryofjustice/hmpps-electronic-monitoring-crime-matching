@@ -27,7 +27,7 @@ const columns = [
   '_source_bucket',
   '_source_key',
   '_source_etag',
-  '__datetime_added'
+  '__datetime_added',
 ]
 
 const createDevicePositionsCSVFromElectronicMonitoringData = (data: ElectronicMonitoringData): string => {

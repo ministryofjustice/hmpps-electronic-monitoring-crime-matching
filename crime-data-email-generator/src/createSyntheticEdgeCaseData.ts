@@ -5,6 +5,7 @@ import createDevicePositionsCsvFromElectronicMonitoringData from './helpers/crea
 import createOrderActivationsPositionsCsvFromElectronicMonitoringData from './helpers/createOrderActivationsPositionsCsvFromElectronicMonitoringData'
 import { createCsvFileFromBatch, createFile } from './helpers/fs'
 import createBatchWithCrimeWithMatches from './fixtures/batches/batch-with-crime-with-matches'
+import createCrimeMatchesCsvFromElectronicMonitoringData from './helpers/createCrimeMatchesCsvFromElectronicMonitoringData'
 
 const createSyntheticEdgeCaseData = () => {
   const batch = createBatchWithCrimeWithMatches()
@@ -18,6 +19,7 @@ const createSyntheticEdgeCaseData = () => {
 
   const emData = createElectronicMonitoringEdgeCaseData(crime)
 
+  createFile('crime_matches.csv', createCrimeMatchesCsvFromElectronicMonitoringData(emData))
   createFile('positions.csv', createDevicePositionsCsvFromElectronicMonitoringData(emData))
   createFile('device_activations.csv', createDeviceActivationsCsvFromElectronicMonitoringData(emData))
   createFile('caseload.csv', createCaseloadCsvFromElectronicMonitoringData(emData))

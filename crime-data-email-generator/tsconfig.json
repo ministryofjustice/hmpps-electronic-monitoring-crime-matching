@@ -3,7 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "sourceMap": true,
     "declaration": true,
     "noEmit": false,
@@ -15,7 +15,8 @@
     "typeRoots": ["./node_modules/@types"],
     "strict": true,
     "types": [
-      "node"
+      "node",
+      "jest"
     ]
   },
   "exclude": [
