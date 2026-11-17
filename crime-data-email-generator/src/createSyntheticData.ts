@@ -5,6 +5,7 @@ import createDevicePositionsCsvFromElectronicMonitoringData from './helpers/crea
 import createDeviceActivationsCsvFromElectronicMonitoringData from './helpers/createDeviceActivationsCsvFromElectronicMonitoringData'
 import createCaseloadCsvFromElectronicMonitoringData from './helpers/createCaseloadCsvFromElectronicMonitoringData'
 import createOrderActivationsPositionsCsvFromElectronicMonitoringData from './helpers/createOrderActivationsPositionsCsvFromElectronicMonitoringData'
+import createCrimeMatchesCsvFromElectronicMonitoringData from './helpers/createCrimeMatchesCsvFromElectronicMonitoringData'
 
 /**
  * Creates a fake batch of crimes and electronic monitoring data that will match to some crimes
@@ -26,6 +27,9 @@ const createSyntheticData = async () => {
 
   // Generate electronic monitoring data w/ some device wearers passing by crime locations
   const emData = await createElectronicMonitoringData(100, batch.crimes)
+
+  // Generate a file for matched activations
+  createFile('crime_matches.csv', createCrimeMatchesCsvFromElectronicMonitoringData(emData))
 
   // Write positions csv to disk
   createFile('s3/position/position.csv', createDevicePositionsCsvFromElectronicMonitoringData(emData))

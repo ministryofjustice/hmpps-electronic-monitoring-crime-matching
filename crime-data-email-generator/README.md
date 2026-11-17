@@ -39,6 +39,8 @@ The top-level `helpers/` directory contains functions that turn fixture data int
 
 `createDevicePositionsCsvFromElectronicMonitoringData.ts` produces Datastore-compatible device position data.
 
+`createCrimeMatchesCsvFromElectronicMonitoringData.ts` produces a reference CSV for matched activations.
+
 `formatters.ts` contains date and timestamp formatting used by the generated Datastore data.
 
 `fs.ts` contains the functions used to write generated data into the `output/` directory.
@@ -88,6 +90,7 @@ The output includes:
 ```text
 output/
   batch-with-100-valid-crimes-at-landmarks.csv
+  crime_matches.csv
   s3/
     position/position.csv
     device_activations/device_activations.csv
@@ -101,6 +104,8 @@ The generator also creates 100 device wearers. Each wearer has between one and t
 
 When an activation is selected to match a crime, its activation and deactivation dates are generated so that the activation covers the crime period.
 
+`output/crime_matches.csv` records the matched activations, including the crime reference, device ID and wearer first name.
+
 Because crimes are generated from a relatively small collection of landmark locations, multiple device wearers may match the same crime. The generated dataset is intended for functional and end-to-end testing rather than production-like statistical distribution.
 
 ### Synthetic edge case data
@@ -113,7 +118,6 @@ npm run create-synthetic-edge-case-data
 This generates a crime batch with related electronic monitoring data for edge case test data, specifically the generator will currently output data for the high sequence count scenario.
 
 It creates a crime batch of one crime and one device wearer match, with positions simulating a sequence count that exceeds the alphabet limit.
-
 
 ## Using the synthetic data
 

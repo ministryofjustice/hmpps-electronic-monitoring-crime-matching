@@ -30,13 +30,12 @@ const createDeviceActivationIncludingMatchedCrime = async (personId: number, cri
     }),
   })
 
-  // eslint-disable-next-line no-console
-  console.log(`\tCrime ref: ${crime.crimeReference}, device id: ${activation.device_id}`)
   const positions = await createTrailPassingThroughCrimeLocation(activation.device_id, personId, crime)
 
   return {
     ...activation,
     positions,
+    matchedCrimeReference: crime.crimeReference,
   }
 }
 
@@ -86,8 +85,6 @@ const createDeviceActivation = async (personId: number, crimes: Array<Crime>) =>
 
 const createDeviceWearer = async (crimes: Array<Crime>): Promise<DeviceWearer> => {
   const deviceWearer = createRandomDeviceWearer()
-  // eslint-disable-next-line no-console
-  console.log(deviceWearer.firstName)
 
   const createActivations = async (index: number): Promise<Array<DeviceActivation>> => {
     if (index >= faker.number.int({ min: 1, max: 3 })) {
